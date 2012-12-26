@@ -118,15 +118,31 @@ set ruler
 set cursorline     " cul <= highlight the current line.
 set foldcolumn=2
 set nowrap
-set guifont=Consolas:h10:cANSI
 set wildmenu
 set wildignore=*.o,*.obj,*~,*.pyc
 set magic			" for regular expressions turn magic on
 set background=dark
-set fileformats=dos,unix
+
+if g:system == "windows"
+    set fileformats=dos,unix
+    set guifont=Consolas:h10:cANSI
+elseif g:system == "linux"
+    set fileformats=unix,dos
+    set guifont=Monospace\ 12
+
+    let g:clang_use_library=0
+    let g:clang_user_options='-stdlib=libstdc++ -std=c++0x'
+endif
+
+set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
 
 cw 10
-language message en
+if g:system == "windows"
+	language message en
+endif
+
+autocmd InsertEnter * :set relativenumber
+autocmd InsertLeave * :set number
 
 " syntax & color scheme
 syntax enable
@@ -165,10 +181,6 @@ imap <C-F12>		<C-O>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --language
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
-" Jump to the tag under current cursor without creating new window.
- map <A-g>						 <C-]>
-imap <A-g>					<C-O><C-]>
-
 " query the word under current cursor in MSDN
  map <silent> <F1>				 :call LocalDoc()<CR>
 imap <silent> <F1>			<C-O>:call LocalDoc()<CR>
@@ -203,7 +215,9 @@ endf
 " Additional Settings for file type: Python and CPP
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+autocmd FileType c			call SetupCpp()
 autocmd FileType C			call SetupCpp()
+autocmd FileType cpp		call SetupCpp()
 autocmd FileType CPP		call SetupCpp()
 autocmd FileType python		call SetupPython()
 
@@ -246,6 +260,7 @@ func! SetupPython()
 endf
 
 func! SetupCpp()
+	call SetupCppHotKeys()
 	if g:cpp_compiler == "gcc"
 		call SetupGCC()
 	elseif g:cpp_compiler == "bcb"
@@ -253,8 +268,6 @@ func! SetupCpp()
 	elseif g:cpp_compiler == "vc90"
 		call SetupVC90()
 	endif
-
-	call SetupCppHotKeys()
 endf
 
 
@@ -289,17 +302,37 @@ endf
 
 func! SetupGCC()
 	compiler gcc
+	setlocal makeprg=g++\ -std=c++0x\ % 
+
+    " add include folders to path
+    setlocal path=.,
+                \/usr/include/,
+                \/usr/include/c++/4.6/,
+                \/usr/include/boost/
+
+    setlocal tags=/usr/include/c++/4.6.3/tags,/usr/include/tags,./tags,./TAGS,tags,TAGS
 
 	"
 	" hotkeys
 	"
+	 map <buffer> <F5>					     :call GCCRunProject()<CR>
+ 	imap <buffer> <F5>					<C-O>:call GCCRunProject()<CR>
+	 map <buffer> <C-F5>				     :call GCCRunProject()<CR>
+	imap <buffer> <C-F5>				<C-O>:call GCCRunProject()<CR>
 	
 	 map <buffer> <C-F7>				     :call GCCCompileCppUnit()<CR><CR>
 	imap <buffer> <C-F7>				<C-O>:call GCCCompileCppUnit()<CR><CR>
 endf
 
 func! GCCCompileCppUnit()
-	echo "not implement yet..."
+	setlocal makeprg=g++\ -std=c++0x\ %
+	execute "update"
+	execute "make"
+endf
+
+func! GCCRunProject()
+    let cmd = "!./a.out"
+    execute cmd
 endf
 
 "
@@ -346,9 +379,9 @@ endf
 func! SetupVC90()
 	" add include folders to path
 	setlocal path=.,
-				  \C:\\Program\\\ Files\\Microsoft\\\ SDKs\\Windows\\v7.0\\Include,
-				  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 9.0\VC\include,
-				  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 9.0\\VC\\atlmfc\\include
+				  "\C:\\Program\\\ Files\\Microsoft\\\ SDKs\\Windows\\v7.0\\Include,
+				  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 11.0\VC\include,
+				  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 11.0\\VC\\atlmfc\\include
 
 	"
 	" hotkeys
@@ -374,9 +407,3 @@ func! VC90CompileCppUnit()
 	execute "update"
 	execute "make"
 endf
-
-
-
-
-
-
