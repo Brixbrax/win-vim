@@ -141,8 +141,8 @@ if g:system == "windows"
 	language message en
 endif
 
-autocmd InsertEnter * :set relativenumber
-autocmd InsertLeave * :set number
+autocmd InsertEnter * :set number
+autocmd InsertLeave * :set relativenumber
 
 " syntax & color scheme
 syntax enable
