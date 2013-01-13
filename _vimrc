@@ -119,9 +119,14 @@ set cursorline     " cul <= highlight the current line.
 set foldcolumn=2
 set nowrap
 set wildmenu
-set wildignore=*.o,*.obj,*~,*.pyc
+set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic			" for regular expressions turn magic on
 set background=dark
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
 
 if g:system == "windows"
     set fileformats=dos,unix
@@ -141,18 +146,26 @@ if g:system == "windows"
 	language message en
 endif
 
-autocmd InsertEnter * :set number
-autocmd InsertLeave * :set relativenumber
+"autocmd InsertEnter * :set number
+"autocmd InsertLeave * :set relativenumber
+ map <M-1>          :set number<CR>
+imap <M-1>     <C-O>:set number<CR>
+ map <M-2>          :set relativenumber<CR>
+imap <M-2>     <C-O>:set relativenumber<CR>
 
 " syntax & color scheme
 syntax enable
 syntax on
-colorscheme koehler
+colorscheme wombat
 
+" indent_guides setting
 let g:indent_guides_auto_colors = 1
 let g:indent_guides_start_level = 1
 let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_enable_on_vim_startup = 0
+
+" showmarks setting
+let g:showmarks_enable = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for NERDTree Plugin
@@ -186,6 +199,27 @@ imap <C-F12>		<C-O>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --language
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+" Remember info about open buffers on close
+set viminfo^=%
+
+" Disable highlight when <leader><cr> is pressed
+ map <silent> <leader>cr         :noh<CR>
+ 
+" Useful mappings for managing tabs
+ map <leader>tn :tabnew<CR>
+ map <leader>to :tabonly<CR>
+ map <leader>tc :tabclose<CR>
+ map <leader>tm :tabmove
+
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+ map <leader>te :tabedit <C-R>=expand("%:p:h")<CR>/<CR>
+
 " query the word under current cursor in MSDN
  map <silent> <F1>				 :call LocalDoc()<CR>
 imap <silent> <F1>			<C-O>:call LocalDoc()<CR>
@@ -199,6 +233,9 @@ imap <silent> <C-F1>		<C-O>:call OnlineDoc()<CR>
 imap <silent> <F4>			<C-O>:cn<CR>
  map <silent> <S-F4>		     :cp<CR>
 imap <silent> <S-F4>		<C-O>:cp<CR>
+
+ map <M-g>                       *:vimgrep <cword> %<CR>
+imap <M-g>                  <C-O>*<C-O>:vimgrep <cword> %<CR>
 
 func! LocalDoc()
 	let s:dexplore = "\"C:\\Program Files\\Common Files\\microsoft shared\\Help 9\\dexplore.exe\""
