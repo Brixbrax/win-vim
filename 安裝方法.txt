@@ -1,0 +1,12 @@
+
+在 XP 上安裝 vim 的 plugin:
+Step 1: install vim
+Step 2: copy 額外抓的 exe 下的檔到 vim.exe 的同目錄下 
+Step 3: copy _vimrc 到 C:\Program Files\Vim\ 蓋掉原有的檔
+Step 4: copy vimfiles 到 C:\Program Files\Vim\vimfiles 蓋掉原有的目錄
+
+在 Win7 上安裝 vim 的 plugin 
+Step 1: install vim
+Step 2: copy 額外抓的 exe 下的檔到 vim.exe 的同目錄下 
+Step 3: copy _vimrc 到 vim.exe 的目錄下 (和 XP 不同)
+Step 4: copy vimfiles 到 C:\Users\XXX\vimfiles (和 XP 不同)
