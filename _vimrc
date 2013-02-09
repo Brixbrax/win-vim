@@ -108,6 +108,7 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
+set hidden
 set showmatch
 set ignorecase
 set smartcase
@@ -122,11 +123,6 @@ set wildmenu
 set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic			" for regular expressions turn magic on
 set background=dark
-
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
 
 if g:system == "windows"
     set fileformats=dos,unix
