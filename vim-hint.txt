@@ -1,0 +1,138 @@
+Insert mode tricks (help i_CTRL)
+1. ESC or CTRL-[ or CTRL-C: go back to normal mode
+2. Backspace or CTRL-H: delete previous character
+3. CTRL-W: = normal mode's db
+4. CTRL-U: = normal mode's d0
+5. CTRL-J or CTRL-M: begin a new line
+6. CTRL-R {0-9a-z...}: Insert the contents of a register. 
+7. CTRL-R CTRL-P {0-9a-z...}: Insert the contents of a register and reindent.
+8. CTRL-T or CTRL-D: insert or delete one indent.
+9. CTRL-F: reindent the current line.
+10. CTRL-O: enter normal mode temporary
+
+Scroll Window (Normal Mode)
+1. CTRL-E, CTRL-Y: scroll window one line up/down 
+
+Visual Mode
+1. vw, vb, ve, ...: select content
+2. viw / vip / vi} / vi' / vi" : select content inside a word/paragraph/block/single quotes/double quotes
+3. vf{char} / vt{char} / v/pattern / v?pattern / 
+4. vwU / vwu / VU / vu : switch to upper case or lower case.
+5. gv : select the previous selected area
+6. o: switch the cursor to the other end of current selected area.
+7. vit / gUit / guit : select content inside a xml node / upper case the value of a xml node / lower case the value of a xml node.
+8. CTRL-V / CTRL-Q: switch to vitual block mode
+9. Vr{char} : replace the whole line with the {char}
+10. CTRL-V3jr{char} : replace the column the of selected lines with the {char}
+11. aw, as, ap : select a word, sentence, a paragraph
+12. ab, aB : select a block (), a block {}
+
+Command-Line Mode
+1. [range]d [x] : delete the specified lines [into register x]
+2. [range]y [x] : yank specified lines [into register x]
+3. [line]put [x] : put the text from register x after the specified line
+4. [range]co {address} : copy the specified lines to below the lines specified by {address}
+5. [range]m {address} : move the specified lines to below the lines specified by {address}
+6. [range]j: join the specified lines
+7. [range]normal {commands} : execute normal mode {commands} on each specified line.
+8. [range]s/{pattern}/{string}/[flags] : replace occurrences of {pattern} with {string} on each specified line
+9. [range]g/{pattern}/[cmd]
+10. @: : repeat last Ex command (see :h @:)
+11. CTRL-D : tab-complete your Ex commands 
+12. <C-R><C-W> : insert the current word at the command prompt.
+13. :his : show command line mode history
+14. q/ : open the command-line window with history searches
+15. q: : open the command-line window with history of Ex commands
+16. ctrl-f : switch from command-line mode to the command-line window
+17. read !{cmd} : execute {cmd} in the shell and insert its stnadard output below the cursor
+18. [range]write !{cmd} : execute {cmd} in the shell with [range] lines as standard input
+19. [range]!{filter} : filter the specified [range] through external program {filter}
+
+
+Normal Mode
+1. [I : display all lines that contain keyword under cursor.
+   [^I : jump to 1st line that contains keyword under cursor.
+   [i : display 1st line that contains keyword under cursor.
+2. <'a : shift left up to mark a
+   <% : shift left until matching (, [, or {
+   << : shift line one shiftwidth to the left
+3. d'a : delete up to mark a
+4. g# : like "#", but without using "<\" and "\>"
+   g* : like "*", but without using "<\" and "\>"
+   gd : goto definition of word under cursor in current function
+   gD : goto definition of word under cursor in current file
+   gI : like "I", but always start in column 1
+   gJ : join lines without inserting space
+5. gUU or gUgU : make line uppercase
+   guu or gugu : make line lowercase
+   gU{motion} : make move text uppercase
+   g~~ or g~{motion} : swap case for move text
+6. ge or gE : go backwords to end of previous word or WORD
+7. ^W ^B : go to bottom window
+   ^W ^T : go to top window  
+   ^W ^N : open new window
+   ^W ^O : close all but current window (only)
+   ^W ^X : exchange current window with window next
+   ^W T : move current window to a new tab page
+8. ^W } : show tag under cursor in preview window
+   ^W ^Z or ^W z: close preview window
+9. ^W ] : split window and show tag under cursor
+10. ZZ : write and quit 
+
+Key mapping
+1. :map c e : map c -> e in normal & visual mode
+2. :map! c e : map c-> e in insert & cmd-line mode
+3. :unmap c  : remove mapping c
+   :unmap! c : remove mapping c
+
+Ex range:
+. $ : the current line, the last line in file
+% * : entire file, visual area
+
+Search
+1. /word1\|word2 : search word1 or word2
+2. :bufdo /word/ : search word in all open files
+3. /jo[ha]n : search john or joan
+
+Replace
+1. %s/^/hello/g : replace the begining of each line by hello
+2. %s/$/harry/g : replace the end of each line by harry
+3. %s/onward/forward/gi : replace onward by forward, case unsensitive
+4. %s/ *$//g : delete all white spaces
+5. g/string/d : delete all lines containing string
+6. v/string/d or g!/string/d : delete all lines containing which did not contain string
+7. %s:^\(.*\)\n\1$:\1:  : delete lines which appears twice
+8. \u is uppercase, \l is lowercase.
+
+Tabs
+1. tabdo %s/foo/bar/g : execute a command in all tabs
+2. tab ball : puts all open files in tabs
+3. :h tabpage.txt
+
+
+Windows splitting
+1. :sview file : same as :split in readonly mode
+2. :hide : close current window
+3. :only : close all windows, excepted current
+4. :b 2 : open #2 buffer in this window
+
+Tags:
+
+Text-Objects
+1. operator type + select type + region type
+   operator type:  v / c / d  (visual/change/delete)
+   select type:    i / a    (inner/an object)
+   region type:   { / [ / ( / " / ' or } / ] / ) / " / '
+                  {}  []  ()  ""  '' 
+
+Important topic
+1. Text objects 
+
+mode
+1. :map    all
+2. :nmap   normal mode
+3. :vmap   visual mode
+4. :imap   insert mode
+5. :smap   select mode
+6. :xmap   visual, select mode
+7. :h map.txt
