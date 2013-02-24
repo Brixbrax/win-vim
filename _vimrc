@@ -184,7 +184,7 @@ filetype plugin indent on
 " Settings for pydiction plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:pydiction_location = expand("$HOMEPATH") . "\\vimfiles\\bundle\\pydiction\\complete-dict"
+let g:pydiction_location = expand("$USERPROFILE") . "\\vimfiles\\bundle\\pydiction\\complete-dict"
 let g:pydiction_menu_height = 15
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
