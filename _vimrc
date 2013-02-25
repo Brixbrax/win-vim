@@ -120,7 +120,13 @@ set background=dark
 
 if g:system == "windows"
     set fileformats=dos,unix
-    set guifont=Consolas:h10:cANSI
+    if $USERDOMAIN == "layan-PC"
+        set guifont=Consolas:h11:cANSI
+    elseif $USERDOMAIN == "layan-NB"
+        set guifont=Consolas:h10:cANSI
+    else
+        set guifont=Consolas:h12:cANSI
+    endif
 elseif g:system == "linux"
     set fileformats=unix,dos
     set guifont=Monospace\ 12
@@ -145,6 +151,9 @@ imap <M-2>     <C-O>:set relativenumber<CR>
  
  map <C-F2>           :so $VIMRUNTIME/_vimrc<CR>
 imap <C-F2>      <C-O>:so $VIMRUNTIME/_vimrc<CR>
+
+" clear the search highlighting
+nnoremap <silent> <C-L>         :<C-U>nohlsearch<CR><C-L>
 
 " syntax & color scheme
 syntax enable
