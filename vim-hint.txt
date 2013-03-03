@@ -116,6 +116,25 @@ Windows splitting
 3. :only : close all windows, excepted current
 4. :b 2 : open #2 buffer in this window
 
+
+Registers
+1. "" : The unnamed register
+   The x, s, d{motion}, c{motion} and y{motion} commands
+   all set the contents of the unnamed register. so, p = ""p
+   也就是說, " register 的內容會被這些指令改寫.
+2. "0 : The Yank register
+   y{motion} commands copied the text into unnamed register and yank register.
+   也就是說, 0 register 的內容只會被最近的 y 指令改寫.
+   所以要貼最後一次 copy 的內容的話可以用 "0p
+3. "a - "z : the named registers, 若用大寫 A ~ Z 代表是 append 而不是要 overwrite
+   "+ or "* : System Clipboard register
+   "% : name of the current file
+   "# : name of the alternate file
+   ". : last inserted text
+   ": : last Ex command
+   "/ : last search pattern
+
+
 Tags:
 
 Text-Objects
