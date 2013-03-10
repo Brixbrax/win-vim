@@ -22,10 +22,19 @@
 " 定義各種變數
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+let g:system = "linux"
+let g:processor_architecture = "x86"
+let g:pc_name = "unknown"
+let g:cpp_compiler = "none"
+
 if has("win16") || has("win32") || has("win64")
     let g:system = "windows"
-else
-    let g:system = "linux"
+    if has("PROCESSOR_ARCHITECTURE") && $PROCESSOR_ARCHITECTURE == "AMD64"
+        let g:processor_architecture = "x64"
+    endif
+    if has("USERDOMAIN")
+        let g:pc_name = $USERDOMAIN
+    endif
 endif
 
 
@@ -86,8 +95,8 @@ endf
 " Load Pathogen plugin to manager all plugins
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+" call pathogen#runtime_append_all_bundles()
+" call pathogen#helptags()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for Common Options
@@ -118,11 +127,18 @@ set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic            " for regular expressions turn magic on
 set background=dark
 
+if has("gui_running")
+    " don't show toolbar
+    set guioptions-=T 
+    " don't show menu
+    " set guioptions-=m
+endif
+
 if g:system == "windows"
     set fileformats=dos,unix
-    if $USERDOMAIN == "layan-PC"
+    if g:pc_name == "layan-PC"
         set guifont=Consolas:h11:cANSI
-    elseif $USERDOMAIN == "layan-NB"
+    elseif g:pc_name == "layan-NB"
         set guifont=Consolas:h10:cANSI
     else
         set guifont=Consolas:h12:cANSI
@@ -142,8 +158,6 @@ if g:system == "windows"
     language message en
 endif
 
-"autocmd InsertEnter * :set number
-"autocmd InsertLeave * :set relativenumber
  map <M-1>          :set number<CR>
 imap <M-1>     <C-O>:set number<CR>
  map <M-2>          :set relativenumber<CR>
@@ -193,8 +207,10 @@ filetype plugin indent on
 " Settings for pydiction plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:pydiction_location = expand("$USERPROFILE") . "\\vimfiles\\bundle\\pydiction\\complete-dict"
-let g:pydiction_menu_height = 15
+if g:system == "windows"
+    let g:pydiction_location = expand("$USERPROFILE") . "\\vimfiles\\bundle\\pydiction\\complete-dict"
+    let g:pydiction_menu_height = 15
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
@@ -210,7 +226,7 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 " Remember info about open buffers on close
-set viminfo^=%
+" set viminfo^=%
 
 " 自動載入上次開啟時的 view, 包含手動建立的 fold.
 autocmd BufWinLeave *.h silent mkview
@@ -249,14 +265,20 @@ imap <silent> <S-F4>       <C-O>:cp<CR>
 
 " search the word under cursor in this file 
 " highlight the word and jump to the first position 
- map <M-G>                      *:vimgrep <cword> %<CR>
-imap <M-G>                 <C-O>*<C-O>:vimgrep <cword> %<CR>
+ map <M-g>                      *:vimgrep <cword> %<CR>
+imap <M-g>            <C-O>*<C-O>:vimgrep <cword> %<CR>
 
 " use tab and Shift-Tab 做縮排 in normal mode and visual/select mode
 nmap <TAB>                      v>
 nmap <S-TAB>                    v<
 vmap <TAB>                      >gv
 vmap <S-TAB>                    <gv
+
+" restore vim's C-i function
+" CTRL-O: 回到前一個 jump 前的位置
+" CTRL-I: 回到剛 jump 後的位置 
+" help jump-motions
+unmap <C-i>
 
 func! LocalDoc()
     let s:word_under_cursor = expand("<cword>")
@@ -272,7 +294,11 @@ func! LocalDoc()
             let s:browser = "hh.exe"
             let s:arguments = "\"C:\\Python27\\Doc\\Python273.chm\""
         else
-            let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
+            if g:processor_architecture == "x86"
+                let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
+            else
+                let s:browser = "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\""
+            endif
             let s:arguments = "http://www.google.com.tw/search?q=" . s:word_under_cursor
         endif
     endif
@@ -288,7 +314,11 @@ endf
 func! OnlineDoc()
     let s:browser = "none"
     if g:system == "windows"
-        let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
+        if g:processor_architecture == "x86"
+            let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
+        else
+            let s:browser = "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\""
+        endif
     endif
     
     let s:word_under_cursor = expand("<cword>")
@@ -437,65 +467,65 @@ endf
 
 func! SetupCppCompiler()
     if g:system == "windows"
-        if $VSINSTALLDIR == "C:\\Program Files\\Microsoft Visual Studio 9.0\\"
-            let g:cpp_compiler = "vc90"
-        elseif $VSINSTALLDIR == "C:\\Program Files\\Microsoft Visual Studio 11.0\\"
+        if stridx($VSINSTALLDIR, "Microsoft Visual Studio 9.0") >= 0
+            let g:cpp_compiler = "vc9"
+        elseif stridx($VSINSTALLDIR, "Microsoft Visual Studio 10.0") >= 0
+            let g:cpp_compiler = "vc10"
+        elseif stridx($VSINSTALLDIR, "Microsoft Visual Studio 11.0") >= 0
             let g:cpp_compiler = "vc11"
+        else
+            let g:cpp_compiler = "none"
         endif
     elseif g:system == "linux"
         let g:cpp_compiler = "gcc"
     endif
 
-    if has("g:cpp_compiler")
-        if g:cpp_compiler == "gcc"
-            call SetupGCCCompiler()
-        elseif g:cpp_compiler == "vc90"
-            call SetupVC90Compiler()
-        elseif g:cpp_compiler == "vc11"
-            call SetupVC11Compiler()
-        endif
+    if g:cpp_compiler == "gcc"
+        call SetupGCCCompiler()
+    elseif g:cpp_compiler == "vc9"
+        call SetupVC9Compiler()
+    elseif g:cpp_compiler == "vc10"
+        call SetupVC10Compiler()
+    elseif g:cpp_compiler == "vc11"
+        call SetupVC11Compiler()
     endif
 endf
 
 func! MakeCppProject()
-    if has("g:cpp_compiler")
-        if g:cpp_compiler == "gcc"
-            call GCCMakeCppProject()
-        elseif g:cpp_compiler == "vc90"
-            call VC90MakeCppProject()
-        elseif g:cpp_compiler == "vc11"
-            call VC11MakeCppProject()
-        endif
+    if g:cpp_compiler == "gcc"
+        call GCCMakeCppProject()
+    elseif g:cpp_compiler == "vc9"
+        call VC9MakeCppProject()
+    elseif g:cpp_compiler == "vc10"
+        call VC10MakeCppProject()
+    elseif g:cpp_compiler == "vc11"
+        call VC11MakeCppProject()
     else
-        echo "cpp compiler is not set."
+        echo "There is No Cpp Compiler"
     endif
 endf
 
 func! CompileCppUnit()
-    if has("g:cpp_compiler")
-        if g:cpp_compiler == "gcc"
-            call GCCCompileCppUnit()
-        elseif g:cpp_compiler == "vc90"
-            call VC90CompileCppUnit()
-        elseif g:cpp_compiler == "vc11"
-            call VC11CompileCppUnit()
-        endif
+    if g:cpp_compiler == "gcc"
+        call GCCCompileCppUnit()
+    elseif g:cpp_compiler == "vc9"
+        call VC9CompileCppUnit()
+    elseif g:cpp_compiler == "vc10"
+        call VC10CompileCppUnit()
+    elseif g:cpp_compiler == "vc11"
+        call VC11CompileCppUnit()
     else
-        echo "cpp compiler is not set."
+        echo "There is No Cpp Compiler"
     endif
 endf
 
 func! RunCppProject()
-    if has("g:cpp_compiler")
-        if g:cpp_compiler == "gcc"
-            let exe_name = './a.out'
-        else
-            let exe_name = expand("%:r") . '.exe'
-        endif
-        silent execute '!' . exe_name
+    if g:cpp_compiler == "gcc"
+        let exe_name = './a.out'
     else
-        echo "cpp compiler is not set."
+        let exe_name = expand("%:r") . '.exe'
     endif
+    silent execute '!' . exe_name
 endf
 
 "
@@ -527,29 +557,62 @@ func! GCCCompileCppUnit()
 endf
 
 "
-" VC90 functions
+" VC9 functions
 "
 
-func! SetupVC90Compiler()
+func! SetupVC9Compiler()
     setlocal path=.,
                   \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 9.0\\VC\include,
                   \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 9.0\\VC\\atlmfc\\include,
                   \C:\\Program\\\ Files\\Microsoft\\\ SDKs\\Windows\\v7.0\\Include
 endf
 
-func! VC90MakeCppProject()
+func! VC9MakeCppProject()
     setlocal makeprg=C:\Windows\Microsoft.NET\Framework\v3.5\MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
-    setlocal errorformat=%f(%l):\ error\ C%n:\ %m
+    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
 
-func! VC90CompileCppUnit()
+func! VC9CompileCppUnit()
     setlocal makeprg=cl\ /EHsc\ %
-    setlocal errorformat=%f(%l)\ :\ error\ C%n:\ %m
+    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
+
+"
+" VC10 functions
+"
+
+func! SetupVC10Compiler()
+    if g:processor_architecture == "x86"
+        setlocal path=.,
+                      \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\include,
+                      \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\\atlmfc\\include,
+                      \C:\\Program\\\ Files\\Microsoft\\\ SDKs\\Windows\\v7.0A\\Include
+    else
+        setlocal path=.,
+                      \C:\\Program\\\ Files\\\ (x86)\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\include,
+                      \C:\\Program\\\ Files\\\ (x86)\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\\atlmfc\\include,
+                      \C:\\Program\\\ Files\\\ (x86)\\Microsoft\\\ SDKs\\Windows\\v7.0A\\Include
+    endif
+endf
+
+func! VC10MakeCppProject()
+    setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
+    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    execute "update"
+    execute "make"
+endf
+
+func! VC10CompileCppUnit()
+    setlocal makeprg=cl\ /EHsc\ %
+    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    execute "update"
+    execute "make"
+endf
+
 
 "
 " VC11 functions
@@ -564,14 +627,14 @@ endf
 
 func! VC11MakeCppProject()
     setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
-    setlocal errorformat=%f(%l):\ error\ C%n:\ %m
+    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
 
 func! VC11CompileCppUnit()
     setlocal makeprg=cl\ /EHsc\ %
-    setlocal errorformat=%f(%l)\ :\ error\ C%n:\ %m
+    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf

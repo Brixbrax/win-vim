@@ -73,11 +73,15 @@ Normal Mode
    ^W ^N : open new window
    ^W ^O : close all but current window (only)
    ^W ^X : exchange current window with window next
-   ^W T : move current window to a new tab page
+   ^W T  : move current window to a new tab page
+   ^W v  : vertical split 
+   ^W K  : move the current window to the topmost position
+   ^W J  : Move the current window to be at the very bottom position.
 8. ^W } : show tag under cursor in preview window
    ^W ^Z or ^W z: close preview window
 9. ^W ] : split window and show tag under cursor
 10. ZZ : write and quit 
+11. :help window-moving
 
 Key mapping
 1. :map c e : map c -> e in normal & visual mode
@@ -108,6 +112,8 @@ Tabs
 1. tabdo %s/foo/bar/g : execute a command in all tabs
 2. tab ball : puts all open files in tabs
 3. :h tabpage.txt
+4. :gt :tabn  : go to the next tab page.
+5. :gT :tabp  : go th the previous tab page.
 
 
 Windows splitting
@@ -155,3 +161,37 @@ mode
 5. :smap   select mode
 6. :xmap   visual, select mode
 7. :h map.txt
+
+Others
+1. :helpgrep
+   search the entire document for a phrase.
+2. :pwd 
+   print working directory
+3. prefixes for variables:
+   $ for environment variables, ex: :echo $HOME
+   & for options, ex: :echo &filetype
+   @ for registers, ex: :echo @a
+4. :help function-list for the list of functions available.
+
+Vim Scripts:
+1. has function 能用的參數
+   :help feature-list
+2. declare variable
+   let i = 0
+   let fruits = ['apple', 'mango', 'coconut']
+   :echo fruits[i]
+   see 'list manipulation' and 'dictionary manipulation' sections in :help function-list
+3. while syntax:
+   let i = 0
+   while i < 5
+       echo i
+       let i += 1
+   endwhile
+4. for syntax
+   for i in range(5)
+       echo i
+   endfor
+   for fruit in fruits
+       echo 'i like' fruit
+   endfor
+4. 
