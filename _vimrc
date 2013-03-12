@@ -29,10 +29,12 @@ let g:cpp_compiler = "none"
 
 if has("win16") || has("win32") || has("win64")
     let g:system = "windows"
-    if has("PROCESSOR_ARCHITECTURE") && $PROCESSOR_ARCHITECTURE == "AMD64"
-        let g:processor_architecture = "x64"
+    if exists("$PROCESSOR_ARCHITECTURE")
+        if $PROCESSOR_ARCHITECTURE == "AMD64"
+            let g:processor_architecture = "x64"
+        endif
     endif
-    if has("USERDOMAIN")
+    if exists("$USERDOMAIN")
         let g:pc_name = $USERDOMAIN
     endif
 endif
@@ -138,8 +140,8 @@ if g:system == "windows"
     set fileformats=dos,unix
     if g:pc_name == "layan-PC"
         set guifont=Consolas:h11:cANSI
-    elseif g:pc_name == "layan-NB"
-        set guifont=Consolas:h10:cANSI
+    elseif g:pc_name == "layan-nb"
+        set guifont=Consolas:h12:cANSI
     else
         set guifont=Consolas:h12:cANSI
     endif
@@ -474,7 +476,7 @@ func! SetupCppCompiler()
         elseif stridx($VSINSTALLDIR, "Microsoft Visual Studio 11.0") >= 0
             let g:cpp_compiler = "vc11"
         else
-            let g:cpp_compiler = "none"
+            let g:cpp_compiler = "mingw"
         endif
     elseif g:system == "linux"
         let g:cpp_compiler = "gcc"
@@ -488,7 +490,17 @@ func! SetupCppCompiler()
         call SetupVC10Compiler()
     elseif g:cpp_compiler == "vc11"
         call SetupVC11Compiler()
+    elseif g:cpp_compiler == "mingw"
+        call SetupMinGWCompiler()
     endif
+    
+    " append tags file.
+    if g:system == "windows"
+        if exists("$USERPROFILE")
+            execute "set tags+=" . $USERPROFILE . '\\vimfiles\\tags\\stl'
+        endif
+    endif
+
 endf
 
 func! MakeCppProject()
@@ -500,6 +512,8 @@ func! MakeCppProject()
         call VC10MakeCppProject()
     elseif g:cpp_compiler == "vc11"
         call VC11MakeCppProject()
+    elseif g:cpp_compiler == "mingw"
+        call MinGWMakeCppProject()
     else
         echo "There is No Cpp Compiler"
     endif
@@ -514,6 +528,8 @@ func! CompileCppUnit()
         call VC10CompileCppUnit()
     elseif g:cpp_compiler == "vc11"
         call VC11CompileCppUnit()
+    elseif g:cpp_compiler == "mingw"
+        call MinGWCompileCppUnit()
     else
         echo "There is No Cpp Compiler"
     endif
@@ -639,3 +655,29 @@ func! VC11CompileCppUnit()
     execute "make"
 endf
 
+"
+" MinGW functions.
+"
+
+func! SetupMinGWCompiler()
+    compiler gcc
+
+    " add include folders to path
+    "setlocal path=.,
+    "            \C:\\MinGW\\lib\\gcc\\mingw32\\4.7.0\\include\\c++,
+    "            \C:\\MinGW\\include
+    setlocal path=.
+endf
+
+func! MinGWMakeCppProject()
+    setlocal makeprg=mingw32-make.exe
+    execute "update"
+    execute "make"
+endf
+
+func! MinGWCompileCppUnit()
+    let cmd = "mingw32-g++.exe -std=c++0x " . expand("%") . " -o " . expand("%:t:r") . ".exe"
+    execute "setlocal makeprg=" . escape(cmd, ' ')
+    execute "update"
+    execute "make"
+endf
