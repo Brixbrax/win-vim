@@ -584,14 +584,14 @@ func! SetupVC9Compiler()
 endf
 
 func! VC9MakeCppProject()
-    setlocal makeprg=C:\Windows\Microsoft.NET\Framework\v3.5\MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
+    setlocal makeprg=C:\Windows\Microsoft.NET\Framework\v3.5\MSBuild.exe\ /nologo\ /v:m\ /t:build\ /p:configuration=debug\ /clp:NoSummary
     setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
 
 func! VC9CompileCppUnit()
-    setlocal makeprg=cl\ /EHsc\ %
+    setlocal makeprg=cl\ /EHsc\ /nologo\ %
     setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
@@ -616,15 +616,15 @@ func! SetupVC10Compiler()
 endf
 
 func! VC10MakeCppProject()
-    setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    setlocal makeprg=MSBuild.exe\ /nologo\ /v:m\ /t:build\ /p:configuration=debug\ /clp:NoSummary
+    setlocal errorformat=%f(%l):\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
 
 func! VC10CompileCppUnit()
-    setlocal makeprg=cl\ /EHsc\ %
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    setlocal makeprg=cl\ /EHsc\ /nologo\ %
+    setlocal errorformat=%f(%l)\ :\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
@@ -642,14 +642,14 @@ func! SetupVC11Compiler()
 endf
 
 func! VC11MakeCppProject()
-    setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
+    setlocal makeprg=MSBuild.exe\ /nologo\ /v:m\ /t:build\ /p:configuration=debug\ /clp:NoSummary
     setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
 endf
 
 func! VC11CompileCppUnit()
-    setlocal makeprg=cl\ /EHsc\ %
+    setlocal makeprg=cl\ /EHsc\ /nologo\ %
     setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
     execute "update"
     execute "make"
