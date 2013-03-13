@@ -25,7 +25,10 @@
 let g:system = "linux"
 let g:processor_architecture = "x86"
 let g:pc_name = "unknown"
+
 let g:cpp_compiler = "none"
+let g:make_target = "build"
+let g:make_config = "debug"
 
 if has("win16") || has("win32") || has("win64")
     let g:system = "windows"
@@ -210,7 +213,7 @@ filetype plugin indent on
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
 if g:system == "windows"
-    let g:pydiction_location = expand("$USERPROFILE") . "\\vimfiles\\bundle\\pydiction\\complete-dict"
+    let g:pydiction_location = $HOME . "\\vimfiles\\bundle\\pydiction\\complete-dict"
     let g:pydiction_menu_height = 15
 endif
 
@@ -429,6 +432,16 @@ endf
 " Common CPP functions 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+func! AppendHomeTagsFiles(tags_file_list)
+    let home_tags_dir = $HOME . "\\vimfiles\\tags\\"
+    let append_tags_path = ""
+    for tags_file in a:tags_file_list
+        let append_tags_path = append_tags_path . home_tags_dir . tags_file . ","
+    endfor
+    let append_tags_path = escape(append_tags_path, ' ')
+    execute "set tags+=" . append_tags_path
+endf
+
 func! SetupCpp()
     call SetupCppHotKeys()
     call SetupCppCompiler()
@@ -468,6 +481,7 @@ func! SetupCppHotKeys()
 endf
 
 func! SetupCppCompiler()
+    " determine the cpp compiler name according to current environment.
     if g:system == "windows"
         if stridx($VSINSTALLDIR, "Microsoft Visual Studio 9.0") >= 0
             let g:cpp_compiler = "vc9"
@@ -482,25 +496,30 @@ func! SetupCppCompiler()
         let g:cpp_compiler = "gcc"
     endif
 
-    if g:cpp_compiler == "gcc"
-        call SetupGCCCompiler()
-    elseif g:cpp_compiler == "vc9"
-        call SetupVC9Compiler()
-    elseif g:cpp_compiler == "vc10"
-        call SetupVC10Compiler()
-    elseif g:cpp_compiler == "vc11"
-        call SetupVC11Compiler()
-    elseif g:cpp_compiler == "mingw"
-        call SetupMinGWCompiler()
-    endif
+    " reset path and tags
+    setlocal path=.
+    setlocal tags=./tags,./TAGS,tags,TAGS
     
-    " append tags file.
+    " append the common tags file.
     if g:system == "windows"
-        if exists("$USERPROFILE")
-            execute "set tags+=" . $USERPROFILE . '\\vimfiles\\tags\\stl'
-        endif
+        let tags_file_list = [ "stl", "baseclasses" ]
+        call AppendHomeTagsFiles(tags_file_list)
     endif
 
+    " call the corresponded setup cpp compiler function.
+    let compiler_list = [ 
+        \[ "gcc", "SetupGCCCompiler" ],
+        \[ "vc9", "SetupVC9Compiler" ],
+        \[ "vc10", "SetupVC10Compiler" ],
+        \[ "vc11", "SetupVC11Compiler" ],
+        \[ "mingw", "SetupMinGWCompiler" ] 
+        \ ]
+    for [ compiler_name, setup_func_name ] in compiler_list
+        if g:cpp_compiler == compiler_name
+            execute 'call ' . setup_func_name . '()'
+            break
+        endif
+    endfor
 endf
 
 func! MakeCppProject()
@@ -552,12 +571,11 @@ func! SetupGCCCompiler()
     compiler gcc
 
     " add include folders to path
-    setlocal path=.,
-                \/usr/include/,
+    setlocal path+=/usr/include/,
                 \/usr/include/c++/4.6/,
                 \/usr/include/boost/
 
-    setlocal tags=/usr/include/c++/4.6.3/tags,/usr/include/tags,./tags,./TAGS,tags,TAGS
+    setlocal tags+=/usr/include/c++/4.6.3/tags,/usr/include/tags
 endf
 
 func! GCCMakeCppProject()
@@ -577,22 +595,34 @@ endf
 "
 
 func! SetupVC9Compiler()
-    setlocal path=.,
-                  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 9.0\\VC\include,
-                  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 9.0\\VC\\atlmfc\\include,
-                  \C:\\Program\\\ Files\\Microsoft\\\ SDKs\\Windows\\v7.0\\Include
+    " set errorformat.
+    setlocal errorformat=%f(%l)\ :\ error\ C%n:\ %m,
+                        \%f(%l)\ :\ fatal\ error\ C%n:\ %m,
+                        \%f(%l):\ error\ C%n:\ %m,
+                        \%f(%l):\ fatal\ error\ C%n:\ %m
+
+    " use $INCLUDE environment variable value and replace ';' to ',' and need
+    " to escape ' ' and '\' before we set to path.
+    let l:inc = substitute($INCLUDE, ';', ',', 'g')
+    let l:inc = escape(l:inc, '\')
+    let l:inc = substitute(l:inc, ' ', '\\\\\\ ', 'g')
+    " disable set path to avoid reducing the performance of tab complete function.
+    "execute "setlocal path+=" . l:inc
+
+    let tags_file_list = [ "vc9_atlmfc", "winsdk70" ]
+    call AppendHomeTagsFiles(tags_file_list)
 endf
 
 func! VC9MakeCppProject()
-    setlocal makeprg=C:\Windows\Microsoft.NET\Framework\v3.5\MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    let l:exe = "C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe"
+    let l:args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
+    execute "setlocal makeprg=" . l:exe . escape(l:args, ' ')
     execute "update"
     execute "make"
 endf
 
 func! VC9CompileCppUnit()
-    setlocal makeprg=cl\ /EHsc\ %
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    setlocal makeprg=cl\ /nologo\ /EHsc\ %
     execute "update"
     execute "make"
 endf
@@ -602,29 +632,34 @@ endf
 "
 
 func! SetupVC10Compiler()
-    if g:processor_architecture == "x86"
-        setlocal path=.,
-                      \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\include,
-                      \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\\atlmfc\\include,
-                      \C:\\Program\\\ Files\\Microsoft\\\ SDKs\\Windows\\v7.0A\\Include
-    else
-        setlocal path=.,
-                      \C:\\Program\\\ Files\\\ (x86)\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\include,
-                      \C:\\Program\\\ Files\\\ (x86)\\Microsoft\\\ Visual\\\ Studio\\\ 10.0\\VC\\atlmfc\\include,
-                      \C:\\Program\\\ Files\\\ (x86)\\Microsoft\\\ SDKs\\Windows\\v7.0A\\Include
-    endif
+    " set errorformat.
+    setlocal errorformat=%f(%l)\ :\ error\ C%n:\ %m,
+                        \%f(%l)\ :\ fatal\ error\ C%n:\ %m,
+                        \%f(%l):\ error\ C%n:\ %m,
+                        \%f(%l):\ fatal\ error\ C%n:\ %m
+
+    " use $INCLUDE environment variable value and replace ';' to ',' and need
+    " to escape ' ' and '\' before we set to path.
+    let l:inc = substitute($INCLUDE, ';', ',', 'g')
+    let l:inc = escape(l:inc, '\')
+    let l:inc = substitute(l:inc, ' ', '\\\\\\ ', 'g')
+    " disable set path to avoid reducing the performance of tab complete function.
+    "execute "setlocal path+=" . l:inc
+
+    let tags_file_list = [ "vc10_atlmfc", "winsdk70a" ]
+    call AppendHomeTagsFiles(tags_file_list)
 endf
 
 func! VC10MakeCppProject()
-    setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    let l:exe = "MSBuild.exe"
+    let l:args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
+    execute "setlocal makeprg=" . l:exe . escape(l:args, ' ')
     execute "update"
     execute "make"
 endf
 
 func! VC10CompileCppUnit()
-    setlocal makeprg=cl\ /EHsc\ %
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    setlocal makeprg=cl\ /EHsc\ /nologo\ %
     execute "update"
     execute "make"
 endf
@@ -634,23 +669,36 @@ endf
 " VC11 functions
 "
 
+
 func! SetupVC11Compiler()
-    setlocal path=.,
-                  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 11.0\\VC\include,
-                  \C:\\Program\\\ Files\\Microsoft\\\ Visual\\\ Studio\\\ 11.0\\VC\\atlmfc\\include,
-                  \C:\\Program\\\ Files\\Windows\\\ Kits\\8.0\\Include\\um
+    " set errorformat.
+    setlocal errorformat=%f(%l)\ :\ error\ C%n:\ %m,
+                        \%f(%l)\ :\ fatal\ error\ C%n:\ %m,
+                        \%f(%l):\ error\ C%n:\ %m,
+                        \%f(%l):\ fatal\ error\ C%n:\ %m
+    
+    " use $INCLUDE environment variable value and replace ';' to ',' and need
+    " to escape ' ' and '\' before we set to path.
+    let l:inc = substitute($INCLUDE, ';', ',', 'g')
+    let l:inc = escape(l:inc, '\')
+    let l:inc = substitute(l:inc, ' ', '\\\\\\ ', 'g')
+    " disable set path to avoid reducing the performance of tab complete function.
+    "execute "setlocal path+=" . l:inc
+
+    let tags_file_list = [ "vc11_atlmfc", "winsdk80_shared", "winsdk80_um" ]
+    call AppendHomeTagsFiles(tags_file_list)
 endf
 
 func! VC11MakeCppProject()
-    setlocal makeprg=MSBuild.exe\ /nologo\ /v:q\ /t:build\ /p:configuration=debug\ /p:GenerateFullPaths=true\ /clp:NoSummary
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    let l:exe = "MSBuild.exe"
+    let l:args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
+    execute "setlocal makeprg=" . l:exe . escape(l:args, ' ')
     execute "update"
     execute "make"
 endf
 
 func! VC11CompileCppUnit()
-    setlocal makeprg=cl\ /EHsc\ %
-    setlocal errorformat=%f(%l)\ :\ fatal\ error\ C%n:\ %m
+    setlocal makeprg=cl\ /EHsc\ /nologo\ %
     execute "update"
     execute "make"
 endf
@@ -663,10 +711,8 @@ func! SetupMinGWCompiler()
     compiler gcc
 
     " add include folders to path
-    "setlocal path=.,
-    "            \C:\\MinGW\\lib\\gcc\\mingw32\\4.7.0\\include\\c++,
+    "setlocal path+=C:\\MinGW\\lib\\gcc\\mingw32\\4.7.0\\include\\c++,
     "            \C:\\MinGW\\include
-    setlocal path=.
 endf
 
 func! MinGWMakeCppProject()
