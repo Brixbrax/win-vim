@@ -27,6 +27,7 @@ let g:processor_architecture = "x86"
 let g:pc_name = "unknown"
 
 let g:cpp_compiler = "none"
+let g:make_proj   = ""
 let g:make_target = "build"
 let g:make_config = "debug"
 
@@ -163,10 +164,17 @@ if g:system == "windows"
     language message en
 endif
 
- map <M-1>          :set number<CR>
-imap <M-1>     <C-O>:set number<CR>
- map <M-2>          :set relativenumber<CR>
-imap <M-2>     <C-O>:set relativenumber<CR>
+" use ALT-1 and ALT-2 to open and close the quickfix window.
+ map <M-1>          :copen<CR>
+imap <M-1>     <C-O>:copen<CR>
+ map <M-2>          :cclose<CR>
+imap <M-2>     <C-O>:cclose<CR>
+
+" use ALT-3 and ALT-4 to set number or relatvienumber
+ map <M-3>          :set number<CR>
+imap <M-3>     <C-O>:set number<CR>
+ map <M-4>          :set relativenumber<CR>
+imap <M-4>     <C-O>:set relativenumber<CR>
  
  map <C-F2>           :so $VIMRUNTIME/_vimrc<CR>
 imap <C-F2>      <C-O>:so $VIMRUNTIME/_vimrc<CR>
@@ -502,7 +510,7 @@ func! SetupCppCompiler()
     
     " append the common tags file.
     if g:system == "windows"
-        let tags_file_list = [ "stl", "baseclasses" ]
+        let tags_file_list = [ "stl", "baseclasses", "wtl81" ]
         call AppendHomeTagsFiles(tags_file_list)
     endif
 
@@ -614,9 +622,12 @@ func! SetupVC9Compiler()
 endf
 
 func! VC9MakeCppProject()
-    let l:exe = "C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe"
-    let l:args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
-    execute "setlocal makeprg=" . l:exe . escape(l:args, ' ')
+    let exe = "C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe"
+    let args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
+    if g:make_proj != ""
+        let args = args . " " . g:make_proj
+    endif
+    execute "setlocal makeprg=" . exe . escape(args, ' ')
     execute "update"
     execute "make"
 endf
@@ -651,9 +662,12 @@ func! SetupVC10Compiler()
 endf
 
 func! VC10MakeCppProject()
-    let l:exe = "MSBuild.exe"
-    let l:args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
-    execute "setlocal makeprg=" . l:exe . escape(l:args, ' ')
+    let exe = "MSBuild.exe"
+    let args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
+    if g:make_proj != ""
+        let args = args . " " . g:make_proj
+    endif
+    execute "setlocal makeprg=" . exe . escape(args, ' ')
     execute "update"
     execute "make"
 endf
@@ -690,9 +704,12 @@ func! SetupVC11Compiler()
 endf
 
 func! VC11MakeCppProject()
-    let l:exe = "MSBuild.exe"
-    let l:args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
-    execute "setlocal makeprg=" . l:exe . escape(l:args, ' ')
+    let exe = "MSBuild.exe"
+    let args = " /nologo /v:m /t:" . g:make_target . " /p:configuration=" . g:make_config . " /clp:NoSummary"
+    if g:make_proj != ""
+        let args = args . " " . g:make_proj
+    endif
+    execute "setlocal makeprg=" . exe . escape(args, ' ')
     execute "update"
     execute "make"
 endf
