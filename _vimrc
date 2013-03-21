@@ -164,17 +164,18 @@ if g:system == "windows"
     language message en
 endif
 
-" use ALT-1 and ALT-2 to open and close the quickfix window.
- map <M-1>          :copen<CR>
-imap <M-1>     <C-O>:copen<CR>
- map <M-2>          :cclose<CR>
-imap <M-2>     <C-O>:cclose<CR>
+" use ALT-1 toggle the quickfix window.
+ map <M-1>          :QFix<CR>
+imap <M-1>     <C-O>:QFix<CR>
 
-" use ALT-3 and ALT-4 to set number or relatvienumber
- map <M-3>          :set number<CR>
-imap <M-3>     <C-O>:set number<CR>
- map <M-4>          :set relativenumber<CR>
-imap <M-4>     <C-O>:set relativenumber<CR>
+ map <M-2>          :EasyBufferToggle<CR>
+imap <M-2>     <C-O>:EasyBufferToggle<CR>
+
+" use ALT-9 and ALT-0 to set number or relatvienumber
+ map <M-9>          :set number<CR>
+imap <M-9>     <C-O>:set number<CR>
+ map <M-0>          :set relativenumber<CR>
+imap <M-0>     <C-O>:set relativenumber<CR>
  
  map <C-F2>           :so $VIMRUNTIME/_vimrc<CR>
 imap <C-F2>      <C-O>:so $VIMRUNTIME/_vimrc<CR>
@@ -195,6 +196,15 @@ let g:indent_guides_enable_on_vim_startup = 0
 
 " showmarks setting
 let g:showmarks_enable = 0
+
+" EasyBuffer setting
+let g:easybuffer_toggle_position = 'HorizontalBelow'
+let g:easybuffer_horizontal_height = '&lines/5'
+
+" PyDoc setting
+let g:pydoc_cmd = 'python -m pydoc'
+" let g:pydoc_open_cmd = 'vsplit'
+" let g:pydoc_open_cmd = 'tabnew'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for NERDTree Plugin
