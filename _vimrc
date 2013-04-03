@@ -252,12 +252,12 @@ autocmd BufReadPost *
 " set viminfo^=%
 
 " 自動載入上次開啟時的 view, 包含手動建立的 fold.
-autocmd BufWinLeave *.h silent mkview
-autocmd BufWinEnter *.h silent loadview
-autocmd BufWinLeave *.c silent mkview
-autocmd BufWinEnter *.c silent loadview
-autocmd BufWinLeave *.cpp silent mkview
-autocmd BufWinEnter *.cpp silent loadview
+" autocmd BufWinLeave *.h silent mkview
+" autocmd BufWinEnter *.h silent loadview
+" autocmd BufWinLeave *.c silent mkview
+" autocmd BufWinEnter *.c silent loadview
+" autocmd BufWinLeave *.cpp silent mkview
+" autocmd BufWinEnter *.cpp silent loadview
 
 " Disable highlight when <leader><cr> is pressed
  map <silent> <leader>cr        :noh<CR>
@@ -302,6 +302,15 @@ vmap <S-TAB>                    <gv
 " CTRL-I: 回到剛 jump 後的位置 
 " help jump-motions
 unmap <C-i>
+
+
+ab #i" #include "
+ab #i< #include <
+ab #i- //--------------------------------------------------------------------------------------------------
+ab #i= //==================================================================================================
+ab #i/ ////////////////////////////////////////////////////////////////////////////////////////////////////
+ab dowhile do<CR>{<CR><CR>} while( 0 );
+
 
 func! LocalDoc()
     let s:word_under_cursor = expand("<cword>")
