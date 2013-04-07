@@ -26,6 +26,7 @@ Visual Mode
 10. CTRL-V3jr{char} : replace the column the of selected lines with the {char}
 11. aw, as, ap : select a word, sentence, a paragraph
 12. ab, aB : select a block (), a block {}
+    note: ab or ib 只作用於 (), 要將整個 {} 選起來可以用 aB or iB
 
 Command-Line Mode
 1. [range]d [x] : delete the specified lines [into register x]
@@ -47,6 +48,7 @@ Command-Line Mode
 17. read !{cmd} : execute {cmd} in the shell and insert its stnadard output below the cursor
 18. [range]write !{cmd} : execute {cmd} in the shell with [range] lines as standard input
 19. [range]!{filter} : filter the specified [range] through external program {filter}
+20. 跑二個指令以上使用  \|  來分開各命令.  ( 用 \ 來跳脫 | 字元 )
 
 
 Normal Mode
@@ -56,6 +58,7 @@ Normal Mode
 2. <'a : shift left up to mark a
    <% : shift left until matching (, [, or {
    << : shift line one shiftwidth to the left
+   >iB or >aB : shift lines inside a block {}
 3. d'a : delete up to mark a
 4. g# : like "#", but without using "<\" and "\>"
    g* : like "*", but without using "<\" and "\>"
@@ -80,6 +83,7 @@ Normal Mode
 8. ^W } : show tag under cursor in preview window
    ^W ^Z or ^W z: close preview window
 9. ^W ] : split window and show tag under cursor
+   ^W ^I : split window and then search for the first occurence of the word under the cursor.
 10. ZZ : write and quit 
 11. :help window-moving
 
@@ -88,6 +92,16 @@ Key mapping
 2. :map! c e : map c-> e in insert & cmd-line mode
 3. :unmap c  : remove mapping c
    :unmap! c : remove mapping c
+   :mapclear : remove all mapping
+4. Command    Normal    Visual    Operator-Pending    Insert    Command-Line
+   :map         O         O               O
+   :nmap        O
+   :vmap                  O
+   :omap                                  O
+   :map!                                                O            O
+   :imap                                                O
+   :cmap                                                             O
+5. :noremap :  不要再遞迴展開 map.
 
 Ex range:
 . $ : the current line, the last line in file
@@ -123,25 +137,35 @@ Windows splitting
 4. :b 2 : open #2 buffer in this window
 
 
-Registers
-1. "" : The unnamed register
+Registers (使用時都要加 " 在最前面)
+1. " : The unnamed register
    The x, s, d{motion}, c{motion} and y{motion} commands
    all set the contents of the unnamed register. so, p = ""p
    也就是說, " register 的內容會被這些指令改寫.
-2. "0 : The Yank register
+2. 0 : The Yank register
    y{motion} commands copied the text into unnamed register and yank register.
    也就是說, 0 register 的內容只會被最近的 y 指令改寫.
-   所以要貼最後一次 copy 的內容的話可以用 "0p
-3. "a - "z : the named registers, 若用大寫 A ~ Z 代表是 append 而不是要 overwrite
-   "+ or "* : System Clipboard register
-   "% : name of the current file
-   "# : name of the alternate file
-   ". : last inserted text
-   ": : last Ex command
-   "/ : last search pattern
+   所以要貼最後一次 copy 的內容的話可以用 "0p 或是用 Ctrl-R0 
+3. a - z : the named registers, 若用大寫 A ~ Z 代表是 append 而不是要 overwrite
+   + or * : System Clipboard register
+   % : name of the current file
+   # : name of the alternate file
+   . : last inserted text
+   : : last Ex command
+   / : last search pattern
+   _ : the blackhole
+   = : an expression
+4. Ctrl-R = 123*321 : 輸入計算 123*321 的值.
 
-
-Tags:
+Programming:
+1. finding unmatched characters:
+   [{ or ]{ : find the previous/next unmatched {
+   [( or ]( : find the previous/next unmatched (
+2. movement:
+   [[ : 向上移動到第一行是 { 的地方
+   ]] : 向下移動到第一行是 { 的地方
+   [] : 向上移動到第一行是 } 的地方
+   ][ : 向下移動到第一行是 } 的地方
 
 Text-Objects
 1. operator type + select type + region type
@@ -149,6 +173,7 @@ Text-Objects
    select type:    i / a    (inner/an object)
    region type:   { / [ / ( / " / ' or } / ] / ) / " / '
                   {}  []  ()  ""  '' 
+   other region type: w, s, b, B
 
 Important topic
 1. Text objects 

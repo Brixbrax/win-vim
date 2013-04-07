@@ -303,6 +303,11 @@ vmap <S-TAB>                    <gv
 " help jump-motions
 unmap <C-i>
 
+" use Atl-Up Atl-Down to swap two lines.
+nmap <silent> <M-Up>            :.m.-2<CR>
+nmap <silent> <M-Down>          :.m.+1<CR>
+imap <silent> <M-Up>       <C-O>:.m.-2<CR>
+imap <silent> <M-Down>     <C-O>:.m.+1<CR>
 
 ab #i" #include "
 ab #i< #include <
@@ -438,8 +443,8 @@ func! SetupPythonHotKeys()
     imap <buffer> <C-F5>                <C-O>:call RunPythonProject()<CR><CR>
      
     " generate tags file
-     map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>
-    imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR>
+     map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>:!cscope -Rbk<CR><CR>
+    imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR><C-O>:!cscope -Rbk<CR><CR>
 
 endf
 
@@ -502,8 +507,8 @@ func! SetupCppHotKeys()
     imap <buffer> <C-F5>                <C-O>:call RunCppProject()<CR>
 
     " generate tags file
-     map <buffer> <C-F12>                    :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ .<CR><CR>
-    imap <buffer> <C-F12>               <C-O>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ .<CR><CR>
+     map <buffer> <C-F12>                    :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ .<CR><CR>:!cscope -Rbk<CR><CR>
+    imap <buffer> <C-F12>               <C-O>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ .<CR><CR><C-O>:!cscope -Rbk<CR><CR>
 
 endf
 
