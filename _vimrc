@@ -471,7 +471,7 @@ func! AppendHomeTagsFiles(tags_file_list)
         let append_tags_path = append_tags_path . home_tags_dir . tags_file . ","
     endfor
     let append_tags_path = escape(append_tags_path, ' ')
-    execute "set tags+=" . append_tags_path
+    execute "setlocal tags+=" . append_tags_path
 endf
 
 func! SetupCpp()
