@@ -206,6 +206,10 @@ let g:pydoc_cmd = 'python -m pydoc'
 " let g:pydoc_open_cmd = 'vsplit'
 " let g:pydoc_open_cmd = 'tabnew'
 
+" Tagbar setting
+let g:tagbar_left = 1
+nnoremap <silent> <F10> :TagbarToggle<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for NERDTree Plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -474,6 +478,16 @@ func! AppendHomeTagsFiles(tags_file_list)
     execute "setlocal tags+=" . append_tags_path
 endf
 
+func! AppendHomePaths(lib_name_list)
+    let home_path_dir = $HOME . "\\vimfiles\\path\\"
+    let append_path = ""
+    for lib_name in a:lib_name_list
+        let append_path = append_path . home_path_dir . lib_name . ","
+    endfor
+    let append_path = escape(append_path, ' ')
+    execute "setlocal path+=" . append_path
+endf
+
 func! SetupCpp()
     call SetupCppHotKeys()
     call SetupCppCompiler()
@@ -532,8 +546,11 @@ func! SetupCppCompiler()
     setlocal path=.
     setlocal tags=./tags,./TAGS,tags,TAGS
     
-    " append the common tags file.
     if g:system == "windows"
+        " append the common path file.
+        let lib_name_list = [ "stl", "wtl81" ]
+        call AppendHomePaths(lib_name_list)
+        " append the common tags file.
         let tags_file_list = [ "stl", "baseclasses", "wtl81" ]
         call AppendHomeTagsFiles(tags_file_list)
     endif
