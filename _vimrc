@@ -210,6 +210,15 @@ let g:pydoc_cmd = 'python -m pydoc'
 let g:tagbar_left = 1
 nnoremap <silent> <F10> :TagbarToggle<CR>
 
+if g:system == "windows"
+    let g:clang_complete_auto = 1
+    let g:clang_complete_copen = 1
+    let g:clang_auto_user_options = 'path, .clang_complete'
+    let g:clang_use_library = 1
+    let g:clang_snippets = 1
+    let g:clang_snippets_engine = 'clang_complete'
+endif
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for NERDTree Plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -312,6 +321,13 @@ nmap <silent> <M-Up>            :.m.-2<CR>
 nmap <silent> <M-Down>          :.m.+1<CR>
 imap <silent> <M-Up>       <C-O>:.m.-2<CR>
 imap <silent> <M-Down>     <C-O>:.m.+1<CR>
+
+" use Atl-Left Atl-Right to switch to previous or next buffer.
+nmap <silent> <M-Left>          :bp<CR>
+nmap <silent> <M-Right>         :bn<CR>
+imap <silent> <M-Left>     <C-O>:bp<CR>
+imap <silent> <M-Right>    <C-O>:bn<CR>
+
 
 ab #i" #include "
 ab #i< #include <
