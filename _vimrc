@@ -210,6 +210,7 @@ let g:pydoc_cmd = 'python -m pydoc'
 let g:tagbar_left = 1
 nnoremap <silent> <F10> :TagbarToggle<CR>
 
+" clang setting
 if g:system == "windows"
     let g:clang_complete_auto = 1
     let g:clang_complete_copen = 1
@@ -218,6 +219,11 @@ if g:system == "windows"
     let g:clang_snippets = 1
     let g:clang_snippets_engine = 'clang_complete'
 endif
+
+" netrw setting
+let g:netrw_cygwin = 0
+let g:netrw_scp_cmd = "pscp.exe -q"
+let g:netrw_sftp_cmd = "psftp"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for NERDTree Plugin
@@ -403,6 +409,7 @@ autocmd FileType C              call SetupCpp()
 autocmd FileType cpp            call SetupCpp()
 autocmd FileType CPP            call SetupCpp()
 autocmd FileType python         call SetupPython()
+autocmd FileType help           call SetupHelp()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Python functions 
@@ -801,3 +808,14 @@ func! MinGWCompileCppUnit()
     execute "update"
     execute "make"
 endf
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" HELP functions 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+func! SetupHelp()
+    " navigate to the link via ENTER key and get back via BACK key.
+    nmap <buffer> <CR> <C-]>
+    nmap <buffer> <BS> <C-T>
+endf
+
