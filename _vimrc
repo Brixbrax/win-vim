@@ -408,8 +408,13 @@ autocmd FileType c              call SetupCpp()
 autocmd FileType C              call SetupCpp()
 autocmd FileType cpp            call SetupCpp()
 autocmd FileType CPP            call SetupCpp()
+
 autocmd FileType python         call SetupPython()
+
 autocmd FileType help           call SetupHelp()
+
+autocmd FileType xml                exe ":silent 1,$!tidy --input-xml true --indent yes -q"
+autocmd FileType html,html,xhtml    exe ":silent 1,$!tidy --indent yes -q"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Python functions 
