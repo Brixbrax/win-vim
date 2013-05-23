@@ -117,6 +117,9 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 
+set cindent
+set cinoptions=:0,g0,p0,t0,(0,W4
+
 set hidden
 set showmatch
 set ignorecase
@@ -195,7 +198,7 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 0
 
 " showmarks setting
-let g:showmarks_enable = 0
+let g:showmarks_enable = 1
 
 " EasyBuffer setting
 let g:easybuffer_toggle_position = 'HorizontalBelow'

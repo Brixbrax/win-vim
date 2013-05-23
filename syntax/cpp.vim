@@ -33,6 +33,7 @@ syn match cppCast		"\<\(const\|static\|dynamic\|reinterpret\)_cast\s*$"
 syn keyword cppStorageClass	mutable
 syn keyword cppStructure	class typename template namespace
 syn keyword cppBoolean		true false
+syn keyword cppCompiler		__super pragma __int64
 
 " C++ 11 extensions
 if !exists("cpp_no_cpp11")
@@ -64,6 +65,7 @@ if version >= 508 || !exists("did_cpp_syntax_inits")
   HiLink cppBoolean		Boolean
   HiLink cppConstant		Constant
   HiLink cppSTL			Identifier
+  HiLink cppCompiler	cppStatement
   delcommand HiLink
 endif
 
