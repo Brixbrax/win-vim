@@ -202,7 +202,7 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 0
 
 " showmarks setting
-" let g:showmarks_enable = 1
+let g:showmarks_enable = 0
 
 " EasyBuffer setting
 let g:easybuffer_toggle_position = 'HorizontalBelow'
