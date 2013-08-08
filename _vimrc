@@ -30,6 +30,9 @@ let g:cpp_compiler = "none"
 let g:make_proj   = ""
 let g:make_target = "build"
 let g:make_config = "debug"
+if !exists("g:make_output")
+    let g:make_output = ""
+endif
 
 if has("win16") || has("win32") || has("win64")
     let g:system = "windows"
@@ -135,6 +138,7 @@ set wildmenu
 set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic            " for regular expressions turn magic on
 set background=dark
+set laststatus=2
 
 if has("gui_running")
     " don't show toolbar
@@ -198,7 +202,7 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 0
 
 " showmarks setting
-let g:showmarks_enable = 1
+" let g:showmarks_enable = 1
 
 " EasyBuffer setting
 let g:easybuffer_toggle_position = 'HorizontalBelow'
@@ -573,10 +577,18 @@ func! SetupCppCompiler()
         let g:cpp_compiler = "gcc"
     endif
 
+    if g:make_output == ""
+        if g:system == "windows"
+            let g:make_output = expand("%:r") . '.exe'
+        elseif g:system == "linux"
+            let g:make_output = './a.out'
+        endif
+    endif
+
     " reset path and tags
     setlocal path=.
     setlocal tags=./tags,./TAGS,tags,TAGS
-    
+
     if g:system == "windows"
         " append the common path file.
         let lib_name_list = [ "stl", "wtl81" ]
@@ -635,12 +647,7 @@ func! CompileCppUnit()
 endf
 
 func! RunCppProject()
-    if g:cpp_compiler == "gcc"
-        let exe_name = './a.out'
-    else
-        let exe_name = expand("%:r") . '.exe'
-    endif
-    silent execute '!' . exe_name
+    silent execute '!start ' . g:make_output
 endf
 
 "
@@ -811,7 +818,7 @@ func! MinGWMakeCppProject()
 endf
 
 func! MinGWCompileCppUnit()
-    let cmd = "mingw32-g++.exe -std=c++0x " . expand("%") . " -o " . expand("%:t:r") . ".exe"
+    let cmd = "g++.exe -std=c++11 " . expand("%") . " -o " . expand("%:t:r") . ".exe"
     execute "setlocal makeprg=" . escape(cmd, ' ')
     execute "update"
     execute "make"

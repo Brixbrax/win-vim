@@ -33,7 +33,7 @@ syn match cppCast		"\<\(const\|static\|dynamic\|reinterpret\)_cast\s*$"
 syn keyword cppStorageClass	mutable
 syn keyword cppStructure	class typename template namespace
 syn keyword cppBoolean		true false
-syn keyword cppCompiler		__super pragma __int64
+syn keyword cppCompiler		__super pragma __int64 __in __out __in_opt __out_opt __inout __inout_opt
 
 " C++ 11 extensions
 if !exists("cpp_no_cpp11")
