@@ -164,6 +164,7 @@ elseif g:system == "linux"
     let g:clang_user_options='-stdlib=libstdc++ -std=c++0x'
 endif
 
+" cscope settings
 set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
 
 cw 10
@@ -482,8 +483,8 @@ func! SetupPythonHotKeys()
     imap <buffer> <C-F5>                <C-O>:call RunPythonProject()<CR><CR>
      
     " generate tags file
-     map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>:!cscope -Rbk<CR><CR>
-    imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR><C-O>:!cscope -Rbk<CR><CR>
+     map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>:!cscope -Rbk<CR><CR>:cscope add cscope.out<CR><CR>
+    imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR><C-O>:!cscope -Rbk<CR><CR><C-O>:cscope add cscope.out<CR><CR>
 
 endf
 
@@ -523,9 +524,28 @@ func! AppendHomePaths(lib_name_list)
     execute "setlocal path+=" . append_path
 endf
 
+func! AppendHomeCScopeFiles(lib_name_list)
+    let home_cscope_dir = $HOME . "\\vimfiles\\cscope"
+    execute "set nocscopeverbose"
+    for lib_name in a:lib_name_list
+        let append_cscope_path = home_cscope_dir . "\\" . lib_name . ".out"
+        execute "cscope add " . append_cscope_path . " " . home_cscope_dir
+    endfor
+    execute "set cscopeverbose"
+endf
+
 func! SetupCpp()
     call SetupCppHotKeys()
     call SetupCppCompiler()
+endf
+
+func! GenerateCppCTagsAndCScopeFiles()
+    execute "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ ."
+    execute "!cscope -Rbk"
+    execute "set nocscopeverbose"
+    execute "cscope kill cscope"
+    execute "set cscopeverbose"
+    execute "cscope add cscope.out"
 endf
 
 func! SetupCppHotKeys()
@@ -556,8 +576,8 @@ func! SetupCppHotKeys()
     imap <buffer> <C-F5>                <C-O>:call RunCppProject()<CR>
 
     " generate tags file
-     map <buffer> <C-F12>                    :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ .<CR><CR>:!cscope -Rbk<CR><CR>
-    imap <buffer> <C-F12>               <C-O>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ .<CR><CR><C-O>:!cscope -Rbk<CR><CR>
+     map <buffer> <C-F12>                    :call GenerateCppCTagsAndCScopeFiles()<CR><CR>
+    imap <buffer> <C-F12>               <C-O>:call GenerateCppCTagsAndCScopeFiles()<CR><CR>
 
 endf
 
@@ -596,6 +616,9 @@ func! SetupCppCompiler()
         " append the common tags file.
         let tags_file_list = [ "stl", "baseclasses", "wtl81" ]
         call AppendHomeTagsFiles(tags_file_list)
+        " append the common cscope file.
+        let cscope_file_list = [ "stl", "baseclasses", "wtl81" ]
+        call AppendHomeCScopeFiles(cscope_file_list)
     endif
 
     " call the corresponded setup cpp compiler function.
@@ -696,8 +719,10 @@ func! SetupVC9Compiler()
     " disable set path to avoid reducing the performance of tab complete function.
     "execute "setlocal path+=" . l:inc
 
-    let tags_file_list = [ "vc9_atlmfc", "winsdk70" ]
+    call AppendHomePaths( ["vc9_crt"] )
+    let tags_file_list = [ "vc9_crt", "vc9_atlmfc", "winsdk70" ]
     call AppendHomeTagsFiles(tags_file_list)
+    call AppendHomeCScopeFiles(tags_file_list)
 endf
 
 func! VC9MakeCppProject()
@@ -736,8 +761,11 @@ func! SetupVC10Compiler()
     " disable set path to avoid reducing the performance of tab complete function.
     "execute "setlocal path+=" . l:inc
 
-    let tags_file_list = [ "vc10_atlmfc", "winsdk70a" ]
+    call AppendHomePaths( ["vc10_crt"] )
+
+    let tags_file_list = [ "vc10_crt", "vc10_atlmfc", "winsdk70a" ]
     call AppendHomeTagsFiles(tags_file_list)
+    call AppendHomeCScopeFiles(tags_file_list)
 endf
 
 func! VC10MakeCppProject()
@@ -778,8 +806,11 @@ func! SetupVC11Compiler()
     " disable set path to avoid reducing the performance of tab complete function.
     "execute "setlocal path+=" . l:inc
 
-    let tags_file_list = [ "vc11_atlmfc", "winsdk80_shared", "winsdk80_um" ]
+    call AppendHomePaths( ["vc11_crt"] )
+
+    let tags_file_list = [ "vc11_crt", "vc11_atlmfc", "winsdk80_shared", "winsdk80_um" ]
     call AppendHomeTagsFiles(tags_file_list)
+    call AppendHomeCScopeFiles(tags_file_list)
 endf
 
 func! VC11MakeCppProject()
