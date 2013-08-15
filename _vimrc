@@ -161,7 +161,7 @@ elseif g:system == "linux"
     set guifont=Monospace\ 12
 
     let g:clang_use_library=0
-    let g:clang_user_options='-stdlib=libstdc++ -std=c++0x'
+    let g:clang_user_options='-stdlib=libstdc++ -std=c++11'
 endif
 
 " cscope settings
@@ -226,6 +226,7 @@ if g:system == "windows"
     let g:clang_use_library = 1
     let g:clang_snippets = 1
     let g:clang_snippets_engine = 'clang_complete'
+    let g:clang_hi_errors = 1
 endif
 
 " netrw setting
@@ -342,6 +343,8 @@ nmap <silent> <M-Right>         :bn<CR>
 imap <silent> <M-Left>     <C-O>:bp<CR>
 imap <silent> <M-Right>    <C-O>:bn<CR>
 
+" easy align plugin hotkeys.
+vnoremap <silent> <Enter> :EasyAlign<cr>
 
 ab #i" #include "
 ab #i< #include <
@@ -562,6 +565,12 @@ func! SetupCppHotKeys()
     " add option 'j' to not jump to the first position.
      map <buffer> <C-K><C-F>                 :vimgrep /<C-R><C-W>/j **/*.cpp **/*.h<CR>
     imap <buffer> <C-K><C-F>            <C-O>:vimgrep /<C-R><C-W>/j **/*.cpp **/*.h<CR>
+
+    " use clang to check error
+     map <buffer> <F6>                       :call g:ClangUpdateQuickFix()<CR>
+    imap <buffer> <F6>                  <C-O>:call g:ClangUpdateQuickFix()<CR>
+     map <buffer> <C-F6>                     :call g:ClangUpdateQuickFix()<CR>
+    imap <buffer> <C-F6>                <C-O>:call g:ClangUpdateQuickFix()<CR>
 
     " compile the cpp project or file
      map <buffer> <F7>                       :call MakeCppProject()<CR><CR>
