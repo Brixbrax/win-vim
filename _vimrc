@@ -344,7 +344,14 @@ imap <silent> <M-Left>     <C-O>:bp<CR>
 imap <silent> <M-Right>    <C-O>:bn<CR>
 
 " easy align plugin hotkeys.
-vnoremap <silent> <Enter> :EasyAlign<cr>
+vnoremap <silent> <Enter> :EasyAlign<CR>
+
+" ShowMarks plugin hotkeys.
+map <silent> <unique> <leader>mt :ShowMarksToggle<CR>
+map <silent> <unique> <leader>mo :ShowMarksOn<CR>
+map <silent> <unique> <leader>mh :ShowMarksClearMark<CR>
+map <silent> <unique> <leader>ma :ShowMarksClearAll<CR>
+map <silent> <unique> <leader>mm :ShowMarksPlaceMark<CR>
 
 ab #i" #include "
 ab #i< #include <
