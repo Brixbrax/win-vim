@@ -544,9 +544,9 @@ endf
 
 func! GenerateCppCTagsAndCScopeFiles()
     execute "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ ."
-    execute "!cscope -Rbk"
     execute "set nocscopeverbose"
     execute "cscope kill cscope"
+    execute "!cscope -Rbk"
     execute "set cscopeverbose"
     execute "cscope add cscope.out"
 endf
