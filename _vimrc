@@ -218,16 +218,17 @@ let g:pydoc_cmd = 'python -m pydoc'
 let g:tagbar_left = 1
 nnoremap <silent> <F10> :TagbarToggle<CR>
 
-" clang setting
-if g:system == "windows"
-    let g:clang_complete_auto = 1
-    let g:clang_complete_copen = 1
-    let g:clang_auto_user_options = 'path, .clang_complete'
-    let g:clang_use_library = 1
-    let g:clang_snippets = 1
-    let g:clang_snippets_engine = 'clang_complete'
-    let g:clang_hi_errors = 1
-endif
+" no longer use clang_complete plugin.
+"" clang setting
+"if g:system == "windows"
+"    let g:clang_complete_auto = 1
+"    let g:clang_complete_copen = 1
+"    let g:clang_auto_user_options = 'path, .clang_complete'
+"    let g:clang_use_library = 1
+"    let g:clang_snippets = 1
+"    let g:clang_snippets_engine = 'clang_complete'
+"    let g:clang_hi_errors = 1
+"endif
 
 " netrw setting
 let g:netrw_cygwin = 0
@@ -255,13 +256,12 @@ nmap <C-F11>           :TrinityToggleNERDTree<CR>
 filetype plugin indent on
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for pydiction plugin
+" Settings for YouCompleteMe plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-if g:system == "windows"
-    let g:pydiction_location = $HOME . "\\vimfiles\\bundle\\pydiction\\complete-dict"
-    let g:pydiction_menu_height = 15
-endif
+" this may slow the code complete.
+" let g:ycm_collect_identifiers_from_tags_files = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
@@ -350,11 +350,11 @@ imap <HOME> <C-O>^
 vnoremap <silent> <Enter> :EasyAlign<CR>
 
 " ShowMarks plugin hotkeys.
-map <silent> <unique> <leader>mt :ShowMarksToggle<CR>
-map <silent> <unique> <leader>mo :ShowMarksOn<CR>
-map <silent> <unique> <leader>mh :ShowMarksClearMark<CR>
-map <silent> <unique> <leader>ma :ShowMarksClearAll<CR>
-map <silent> <unique> <leader>mm :ShowMarksPlaceMark<CR>
+map <silent> <leader>mt :ShowMarksToggle<CR>
+map <silent> <leader>mo :ShowMarksOn<CR>
+map <silent> <leader>mh :ShowMarksClearMark<CR>
+map <silent> <leader>ma :ShowMarksClearAll<CR>
+map <silent> <leader>mm :ShowMarksPlaceMark<CR>
 
 ab #i" #include "
 ab #i< #include <
