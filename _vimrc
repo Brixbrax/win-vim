@@ -343,6 +343,9 @@ nmap <silent> <M-Right>         :bn<CR>
 imap <silent> <M-Left>     <C-O>:bp<CR>
 imap <silent> <M-Right>    <C-O>:bn<CR>
 
+nmap <HOME> ^
+imap <HOME> <C-O>^
+
 " easy align plugin hotkeys.
 vnoremap <silent> <Enter> :EasyAlign<CR>
 
@@ -550,12 +553,18 @@ func! SetupCpp()
 endf
 
 func! GenerateCppCTagsAndCScopeFiles()
+    " generate ctags
     execute "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ ."
-    execute "set nocscopeverbose"
-    execute "cscope kill cscope"
+    " generate cscope
+    if filereadable( "cscope.out" )
+        execute "set nocscopeverbose"
+        execute "cscope kill cscope.out"
+        execute "set cscopeverbose"
+    endif
     execute "!cscope -Rbk"
-    execute "set cscopeverbose"
-    execute "cscope add cscope.out"
+    if filereadable( "cscope.out" )
+        execute "cscope add cscope.out"
+    endif
 endf
 
 func! SetupCppHotKeys()
