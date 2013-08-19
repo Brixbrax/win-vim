@@ -260,11 +260,10 @@ filetype plugin indent on
 """"""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-" this may slow the code complete.
-" let g:ycm_collect_identifiers_from_tags_files = 1
-
+" enable this may slow the code complete and increase system memory usage.
+" let g:ycm_collect_identifiers_from_tags_files = 0
 let g:ycm_confirm_extra_conf = 0
-let g:ycm_global_ycm_extra_conf = $HOME . "\\vimfiles\\bundle\\YouCompleteMe\\cpp\\ycm\\.ycm_extra_conf.py"
+let g:ycm_global_ycm_extra_conf = $HOME . "\\vimfiles\\misc\\YouCompleteMe\\global_ycm_extra_conf.py"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
@@ -379,7 +378,7 @@ func! LocalDoc()
             let s:arguments = "/helpcol ms-help://MS.W7SDK.1033 /usehelpsettings WindowsSDK.1.0 /LaunchFKeywordTopic " . s:word_under_cursor
         elseif &filetype == "python"
             let s:browser = "hh.exe"
-            let s:arguments = "\"C:\\Python27\\Doc\\Python273.chm\""
+            let s:arguments = "\"C:\\Python27\\Doc\\Python275.chm\""
         else
             if g:processor_architecture == "x86"
                 let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
@@ -445,6 +444,11 @@ autocmd FileType html,html,xhtml    exe ":silent 1,$!tidy --indent yes -q"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 func! SetupPython()
+    if exists( "s:setup_python_flag" ) && s:setup_python_flag == 1
+        return
+    endif
+
+    let s:setup_python_flag = 1
 
     "
     " setup hotkeys
@@ -499,8 +503,8 @@ func! SetupPythonHotKeys()
     imap <buffer> <C-F5>                <C-O>:call RunPythonProject()<CR><CR>
      
     " generate tags file
-     map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>:!cscope -Rbk<CR><CR>:cscope add cscope.out<CR><CR>
-    imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR><C-O>:!cscope -Rbk<CR><CR><C-O>:cscope add cscope.out<CR><CR>
+     map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>
+    imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR>
 
 endf
 
@@ -551,13 +555,19 @@ func! AppendHomeCScopeFiles(lib_name_list)
 endf
 
 func! SetupCpp()
+    if exists( "s:setup_cpp_flag" ) && s:setup_cpp_flag == 1
+        return
+    endif
+
+    let s:setup_cpp_flag = 1
+
     call SetupCppHotKeys()
     call SetupCppCompiler()
 endf
 
 func! GenerateCppCTagsAndCScopeFiles()
     " generate ctags
-    execute "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=C++ ."
+    execute "!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q ."
     " generate cscope
     if filereadable( "cscope.out" )
         execute "set nocscopeverbose"
