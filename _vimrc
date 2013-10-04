@@ -139,6 +139,7 @@ set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic            " for regular expressions turn magic on
 set background=dark
 set laststatus=2
+set spell
 
 if has("gui_running")
     " don't show toolbar
@@ -743,7 +744,7 @@ func! GCCMakeCppProject()
 endf
 
 func! GCCCompileCppUnit()
-    setlocal makeprg=g++\ -std=c++0x\ %
+    setlocal makeprg=g++\ -std=c++11\ %
     execute "update"
     execute "make"
 endf
@@ -897,7 +898,7 @@ func! MinGWMakeCppProject()
 endf
 
 func! MinGWCompileCppUnit()
-    let cmd = "g++.exe -std=c++11 " . expand("%") . " -o " . expand("%:t:r") . ".exe"
+    let cmd = "g++.exe -std=c++11 -msse2 " . expand("%") . " -o " . expand("%:t:r") . ".exe"
     execute "setlocal makeprg=" . escape(cmd, ' ')
     execute "update"
     execute "make"
