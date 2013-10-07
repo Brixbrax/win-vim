@@ -147,6 +147,7 @@ set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic            " for regular expressions turn magic on
 set background=dark
 set laststatus=2
+set spell
 
 if has("gui_running")
     " don't show toolbar
