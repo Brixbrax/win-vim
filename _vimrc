@@ -26,10 +26,18 @@ let g:system = "linux"
 let g:processor_architecture = "x86"
 let g:pc_name = "unknown"
 
-let g:cpp_compiler = "none"
-let g:make_proj   = ""
-let g:make_target = "build"
-let g:make_config = "debug"
+if !exists("g:cpp_compiler")
+    let g:cpp_compiler = "none"
+endif
+if !exists("g:make_proj")
+    let g:make_proj   = ""
+endif
+if !exists("g:make_target")
+    let g:make_target = "build"
+endif
+if !exists("g:make_config")
+    let g:make_config = "debug"
+endif
 if !exists("g:make_output")
     let g:make_output = ""
 endif
@@ -261,7 +269,7 @@ filetype plugin indent on
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " enable this may slow the code complete and increase system memory usage.
-" let g:ycm_collect_identifiers_from_tags_files = 0
+let g:ycm_collect_identifiers_from_tags_files = 0
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_global_ycm_extra_conf = $HOME . "\\vimfiles\\misc\\YouCompleteMe\\global_ycm_extra_conf.py"
 let g:ycm_complete_in_comments = 1
@@ -357,6 +365,14 @@ imap <silent> <M-Right>    <C-O>:bn<CR>
 
 nmap <HOME> ^
 imap <HOME> <C-O>^
+
+" easy split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nnoremap Y y$
 
 " easy align plugin hotkeys.
 vnoremap <silent> <Enter> :EasyAlign<CR>
@@ -743,7 +759,7 @@ func! GCCMakeCppProject()
 endf
 
 func! GCCCompileCppUnit()
-    setlocal makeprg=g++\ -std=c++0x\ %
+    setlocal makeprg=g++\ -std=c++11\ %
     execute "update"
     execute "make"
 endf
@@ -897,7 +913,7 @@ func! MinGWMakeCppProject()
 endf
 
 func! MinGWCompileCppUnit()
-    let cmd = "g++.exe -std=c++11 " . expand("%") . " -o " . expand("%:t:r") . ".exe"
+    let cmd = "g++.exe -std=c++11 -msse2 " . expand("%") . " -o " . expand("%:t:r") . ".exe"
     execute "setlocal makeprg=" . escape(cmd, ' ')
     execute "update"
     execute "make"
