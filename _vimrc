@@ -284,6 +284,15 @@ let g:ycm_max_diagnostics_to_display = 30
 
 let g:mta_use_matchparen_group = 1
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Settings for rainbow_parentheses plugin
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
