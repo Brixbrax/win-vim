@@ -211,8 +211,8 @@ let g:indent_guides_start_level = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 0
 
-" showmarks setting
-let g:showmarks_enable = 0
+" showmarks setting => replaced with vim-signature
+" let g:showmarks_enable = 0
 
 " EasyBuffer setting
 let g:easybuffer_toggle_position = 'HorizontalBelow'
@@ -352,6 +352,12 @@ vmap <S-TAB>                    <gv
 " help jump-motions
 unmap <C-i>
 
+" restore vim's c-a, c-x, c-v
+unmap <C-a>
+unmap <C-x>
+unmap <C-v>
+
+
 " use Atl-Up Atl-Down to swap two lines.
 nmap <silent> <M-Up>            :.m.-2<CR>
 nmap <silent> <M-Down>          :.m.+1<CR>
@@ -378,12 +384,16 @@ nnoremap Y y$
 " easy align plugin hotkeys.
 vnoremap <silent> <Enter> :EasyAlign<CR>
 
-" ShowMarks plugin hotkeys.
-map <silent> <leader>mt :ShowMarksToggle<CR>
-map <silent> <leader>mo :ShowMarksOn<CR>
-map <silent> <leader>mh :ShowMarksClearMark<CR>
-map <silent> <leader>ma :ShowMarksClearAll<CR>
-map <silent> <leader>mm :ShowMarksPlaceMark<CR>
+" ShowMarks plugin has been replaced with vim-signature
+"" ShowMarks plugin hotkeys.
+"map <silent> <leader>mt :ShowMarksToggle<CR>
+"map <silent> <leader>mo :ShowMarksOn<CR>
+"map <silent> <leader>mh :ShowMarksClearMark<CR>
+"map <silent> <leader>ma :ShowMarksClearAll<CR>
+"map <silent> <leader>mm :ShowMarksPlaceMark<CR>
+
+" vim-signature plugin hotkeys.
+noremap <silent> <leader>mt :SignatureToggle<CR>
 
 ab #i" #include "
 ab #i< #include <
