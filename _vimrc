@@ -293,6 +293,13 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Settings for ProtoDef plugin
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:protodefctagsexe = $VIM . '\ctags.exe'
+let g:protodefprotogetter = $HOME . "\\vimfiles\\bundle\\vim-protodef\\pullproto.pl"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -361,11 +368,8 @@ vmap <S-TAB>                    <gv
 " help jump-motions
 unmap <C-i>
 
-" restore vim's c-a, c-x, c-v
-unmap <C-a>
-unmap <C-x>
-unmap <C-v>
-
+" restore vim's c-a
+nunmap <C-a>
 
 " use Atl-Up Atl-Down to swap two lines.
 nmap <silent> <M-Up>            :.m.-2<CR>
@@ -389,6 +393,12 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 nnoremap Y y$
+
+nnoremap / /\v
+vnoremap / /\v
+
+noremap <leader>yy "+y
+noremap <leader>pp "+p
 
 " easy align plugin hotkeys.
 vnoremap <silent> <Enter> :EasyAlign<CR>
