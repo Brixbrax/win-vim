@@ -300,6 +300,12 @@ au Syntax * RainbowParenthesesLoadBraces
 let g:protodefctagsexe = $VIM . '\ctags.exe'
 let g:protodefprotogetter = $HOME . "\\vimfiles\\bundle\\vim-protodef\\pullproto.pl"
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Settings for YankRing plugin
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+nnoremap <silent> <F11> :YRShow<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -436,11 +442,7 @@ func! LocalDoc()
             let s:browser = "hh.exe"
             let s:arguments = "\"C:\\Python27\\Doc\\Python275.chm\""
         else
-            if g:processor_architecture == "x86"
-                let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
-            else
-                let s:browser = "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\""
-            endif
+            let s:browser = "chrome"
             let s:arguments = "http://www.google.com.tw/search?q=" . s:word_under_cursor
         endif
     endif
@@ -454,29 +456,19 @@ func! LocalDoc()
 endf
 
 func! OnlineDoc()
-    let s:browser = "none"
-    if g:system == "windows"
-        if g:processor_architecture == "x86"
-            let s:browser = "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\""
-        else
-            let s:browser = "\"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe\""
-        endif
-    endif
-    
+    let s:browser = "chrome"
     let s:word_under_cursor = expand("<cword>")
 
     if &filetype == "cpp"
-        let s:arguments = "http://social.msdn.microsoft.com/search/en-us?query=" . s:word_under_cursor
+        let s:query_url = "http://social.msdn.microsoft.com/search/en-us?query="
+    elseif &filetype == "python"
+        let s:query_url = "http://www.google.com.tw/search?q=python+"
     else
-        let s:arguments = "http://www.google.com.tw/search?q=" . "python+" . s:word_under_cursor
+        let s:query_url = "http://www.google.com.tw/search?q="
     endif
 
-    if s:browser != "none"
-        let s:cmd = "!start " . s:browser . " " . s:arguments
-        silent execute s:cmd
-    else
-        echo "browser is not set."
-    endif
+    let s:cmd = "!cmd /C start " . s:browser . " " . s:query_url . s:word_under_cursor
+    silent execute s:cmd
 endf
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
