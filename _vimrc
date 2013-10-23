@@ -254,6 +254,15 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_max_diagnostics_to_display = 30
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
+" Settings for SnipMate plugin
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" because YouCompleteMe has taken TAB key, we need to use another key for SnipMate plugin
+
+imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
+smap <C-J> <Plug>snipMateNextOrTrigger
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for MatchTagAlways plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
