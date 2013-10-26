@@ -262,6 +262,9 @@ let g:ycm_max_diagnostics_to_display = 30
 imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 
+imap <A-j> <esc>a<Plug>snipMateNextOrTrigger
+smap <A-j> <Plug>snipMateNextOrTrigger
+
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " Settings for MatchTagAlways plugin
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -290,6 +293,10 @@ let g:protodefprotogetter = $HOME . "\\vimfiles\\bundle\\vim-protodef\\pullproto
 
 nnoremap <silent> <F11> :YRShow<CR>
 
+" don't use default key because <C-P> should be reserved for Ctrl-P plugin.
+let g:yankring_replace_n_pkey = '<C-Up>'
+let g:yankring_replace_n_nkey = '<C-Down>'
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -316,6 +323,7 @@ autocmd BufReadPost *
 
 " Disable highlight when <leader><cr> is pressed
  map <silent> <leader>cr        :noh<CR>
+ map <silent> <leader>l         :noh<CR>
  
 " Useful mappings for managing tabs
  map <leader>tn                 :tabnew<CR>
