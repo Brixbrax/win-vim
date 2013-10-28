@@ -148,62 +148,64 @@ elseif g:system == "linux"
     let g:clang_user_options='-stdlib=libstdc++ -std=c++11'
 endif
 
-" cscope settings
-set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
-
 cw 10
 if g:system == "windows"
     language message en
 endif
-
-" use ALT-1 toggle the quickfix window.
- map <M-1>          :QFix<CR>
-imap <M-1>     <C-O>:QFix<CR>
-
- map <M-2>          :EasyBufferToggle<CR>
-imap <M-2>     <C-O>:EasyBufferToggle<CR>
-
-" use ALT-9 and ALT-0 to set number or relatvienumber
- map <M-9>          :set number<CR>
-imap <M-9>     <C-O>:set number<CR>
- map <M-0>          :set relativenumber<CR>
-imap <M-0>     <C-O>:set relativenumber<CR>
- 
- map <C-F2>           :so $VIMRUNTIME/_vimrc<CR>
-imap <C-F2>      <C-O>:so $VIMRUNTIME/_vimrc<CR>
-
-" clear the search highlighting
-nnoremap <silent> <C-L>         :<C-U>nohlsearch<CR><C-L>
 
 " syntax & color scheme
 syntax enable
 syntax on
 colorscheme candycode
 
-" indent_guides setting
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" All Plugins Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"
+" cscope 
+"
+
+set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
+
+"
+" indent_guides
+"
+
 let g:indent_guides_auto_colors = 1
 let g:indent_guides_start_level = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 0
 
-" showmarks setting => replaced with vim-signature
-" let g:showmarks_enable = 0
+"
+" EasyBuffer
+"
 
-" EasyBuffer setting
 let g:easybuffer_toggle_position = 'HorizontalBelow'
 let g:easybuffer_horizontal_height = '&lines/5'
 
-" PyDoc setting
+" 
+" PyDoc
+"
+
 let g:pydoc_cmd = 'python -m pydoc'
 " let g:pydoc_open_cmd = 'vsplit'
 " let g:pydoc_open_cmd = 'tabnew'
 
-" Tagbar setting
+" 
+" Tagbar
+"
+
 let g:tagbar_left = 1
-nnoremap <silent> <F10> :TagbarToggle<CR>
+
+
+"
+" clang_complete
+"
 
 " no longer use clang_complete plugin.
-"" clang setting
+"
 "if g:system == "windows"
 "    let g:clang_complete_auto = 1
 "    let g:clang_complete_copen = 1
@@ -214,35 +216,32 @@ nnoremap <silent> <F10> :TagbarToggle<CR>
 "    let g:clang_hi_errors = 1
 "endif
 
-" netrw setting
+"
+" netrw
+"
+
 let g:netrw_cygwin = 0
 let g:netrw_scp_cmd = "pscp.exe -q"
 let g:netrw_sftp_cmd = "psftp"
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for NERDTree Plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" NERDTree
+" 
 
-" Open and close all the three plugins on the same time 
-nmap <C-F8>            :TrinityToggleAll<CR> 
-" Open and close the srcexpl.vim separately 
-nmap <C-F9>            :TrinityToggleSourceExplorer<CR> 
-" Open and close the taglist.vim separately 
-nmap <C-F10>           :TrinityToggleTagList<CR> 
-" Open and close the NERD_tree.vim separately 
-nmap <C-F11>           :TrinityToggleNERDTree<CR> 
+" N/A
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for Omnicppcomplete plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" Omnicppcomplete
+"
 
-" enable filetype detect and pluing and load corresponded indent file.
+" N/A
+
+" enable filetype detect and plugin and load corresponded indent file.
 filetype plugin indent on
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for YouCompleteMe plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"
+" YouCompleteMe
+"
 
 " enable this may slow the code complete and increase system memory usage.
 let g:ycm_collect_identifiers_from_tags_files = 0
@@ -253,49 +252,47 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_max_diagnostics_to_display = 30
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for SnipMate plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" SnipMate
+"
 
-" because YouCompleteMe has taken TAB key, we need to use another key for SnipMate plugin
+" N/A
 
-imap <C-J> <esc>a<Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
-
-imap <A-j> <esc>a<Plug>snipMateNextOrTrigger
-smap <A-j> <Plug>snipMateNextOrTrigger
-
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for MatchTagAlways plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" MatchTagAlways 
+" 
 
 let g:mta_use_matchparen_group = 1
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for rainbow_parentheses plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" rainbow_parentheses
+"
 
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for ProtoDef plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" ProtoDef
+" 
 
 let g:protodefctagsexe = $VIM . '\ctags.exe'
 let g:protodefprotogetter = $HOME . "\\vimfiles\\bundle\\vim-protodef\\pullproto.pl"
 
-""""""""""""""""""""""""""""""""""""""""""""""""""
-" Settings for YankRing plugin
-""""""""""""""""""""""""""""""""""""""""""""""""""
-
-nnoremap <silent> <F11> :YRShow<CR>
+"
+" YankRing
+"
 
 " don't use default key because <C-P> should be reserved for Ctrl-P plugin.
 let g:yankring_replace_n_pkey = '<C-Up>'
 let g:yankring_replace_n_nkey = '<C-Down>'
+
+"
+" Gundo
+"
+
+" N/A
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
@@ -321,44 +318,129 @@ autocmd BufReadPost *
 " autocmd BufWinLeave *.cpp silent mkview
 " autocmd BufWinEnter *.cpp silent loadview
 
-" Disable highlight when <leader><cr> is pressed
- map <silent> <leader>cr        :noh<CR>
- map <silent> <leader>l         :noh<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" All Hot Keys Mapping
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"
+" <leader> mappings
+"
+
+let mapleader = "\\"
+
+" clear the search highlighting
+     map <silent> <leader>l          :noh<CR>
  
 " Useful mappings for managing tabs
- map <leader>tn                 :tabnew<CR>
- map <leader>to                 :tabonly<CR>
- map <leader>tc                 :tabclose<CR>
- map <leader>tm                 :tabmove
+     map <leader>tn                  :tabnew<CR>
+     map <leader>to                  :tabonly<CR>
+     map <leader>tc                  :tabclose<CR>
+     map <leader>tm                  :tabmove
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
- map <leader>te                 :tabedit <C-R>=expand("%:p:h")<CR>/<CR>
+     map <leader>te                  :tabedit <C-R>=expand("%:p:h")<CR>/<CR>
 
-" query the word under current cursor in MSDN
- map <silent> <F1>              :call LocalDoc()<CR>
-imap <silent> <F1>         <C-O>:call LocalDoc()<CR>
+nnoremap <leader>jd                  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
- map <silent> <C-F1>            :call OnlineDoc()<CR>
-imap <silent> <C-F1>       <C-O>:call OnlineDoc()<CR>
+ noremap <leader>yy                  "+y
+ noremap <leader>pp                  "+p
+
+" 
+" Function Keys ( F1 ~ F12 ) mappings
+"
+
+" query the word under current cursor from local document.
+     map <silent> <F1>               :call LocalDoc()<CR>
+    imap <silent> <F1>          <C-O>:call LocalDoc()<CR>
+
+" query the word under current cursor from online document.
+     map <silent> <C-F1>             :call OnlineDoc()<CR>
+    imap <silent> <C-F1>        <C-O>:call OnlineDoc()<CR>
+
+" reload vim rc file.
+     map <C-F2>                      :so $VIMRUNTIME/_vimrc<CR>
+    imap <C-F2>                 <C-O>:so $VIMRUNTIME/_vimrc<CR>
 
 " 用 F4 , S-F4 來切到下一個或上一個錯誤的位置
 " 可以用 :copen 開啟 QuickFix Window
- map <silent> <F4>              :cn<CR>
-imap <silent> <F4>         <C-O>:cn<CR>
- map <silent> <S-F4>            :cp<CR>
-imap <silent> <S-F4>       <C-O>:cp<CR>
+     map <silent> <F4>               :cn<CR>
+    imap <silent> <F4>          <C-O>:cn<CR>
+     map <silent> <S-F4>             :cp<CR>
+    imap <silent> <S-F4>        <C-O>:cp<CR>
+
+" Open and close all the three plugins (srcexpl, taglist, NERDTree) on the same time 
+    nmap <C-F8>                      :TrinityToggleAll<CR> 
+    nmap <C-F9>                      :TrinityToggleSourceExplorer<CR> 
+    nmap <C-F10>                     :TrinityToggleTagList<CR> 
+    nmap <C-F11>                     :TrinityToggleNERDTree<CR> 
+
+" Toggle the Tagbar plugin, better than taglist plugin.
+nnoremap <silent> <F10>              :TagbarToggle<CR>
+
+" 
+" ATL Keys mappings.
+"
+
+" use ATL-0 to toggle relatvienumber
+     map <silent> <M-0>              :set relativenumber!<CR>
+    imap <silent> <M-0>         <C-O>:set relativenumber!<CR>
+
+" use ALT-1 to toggle the quickfix window.
+     map <silent> <M-1>              :QFix<CR>
+    imap <silent> <M-1>         <C-O>:QFix<CR>
+
+" use ATL-2 to toggle EasyBuffer window
+     map <silent> <M-2>              :EasyBufferToggle<CR>
+    imap <silent> <M-2>         <C-O>:EasyBufferToggle<CR>
+
+" use ATL-3 to toggle YankRing window.
+nnoremap <silent> <M-3>              :YRShow<CR>
+
+" use ATL-4 to toggle Gundo window.
+nnoremap <silent> <M-4>              :GundoToggle<CR>
 
 " search the word under cursor in this file 
 " highlight the word and jump to the first position 
- map <M-g>                      *:vimgrep <cword> %<CR>
-imap <M-g>            <C-O>*<C-O>:vimgrep <cword> %<CR>
+     map          <M-g>             *:vimgrep <cword> %<CR>
+    imap          <M-g>   <C-O>*<C-O>:vimgrep <cword> %<CR>
+
+" because YouCompleteMe has taken TAB key, we need to use another key for SnipMate plugin
+    imap          <A-j>              <esc>a<Plug>snipMateNextOrTrigger
+    smap          <A-j>              <Plug>snipMateNextOrTrigger
+
+" use Atl-Up Atl-Down to swap two lines.
+    nmap <silent> <M-Up>             :.m.-2<CR>
+    nmap <silent> <M-Down>           :.m.+1<CR>
+    imap <silent> <M-Up>        <C-O>:.m.-2<CR>
+    imap <silent> <M-Down>      <C-O>:.m.+1<CR>
+
+" use Atl-Left Atl-Right to switch to previous or next buffer.
+    nmap <silent> <M-Left>           :bp<CR>
+    nmap <silent> <M-Right>          :bn<CR>
+    imap <silent> <M-Left>      <C-O>:bp<CR>
+    imap <silent> <M-Right>     <C-O>:bn<CR>
+
+" 
+" Tab Keys mappings.
+"
 
 " use tab and Shift-Tab 做縮排 in normal mode and visual/select mode
-nmap <TAB>                      v>
-nmap <S-TAB>                    v<
-vmap <TAB>                      >gv
-vmap <S-TAB>                    <gv
+    nmap <TAB>                      v>
+    nmap <S-TAB>                    v<
+    vmap <TAB>                      >gv
+    vmap <S-TAB>                    <gv
+
+"
+" CTRL Keys Mapping
+"
+
+" easy split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " restore vim's C-i function
 " CTRL-O: 回到前一個 jump 前的位置
@@ -369,45 +451,16 @@ unmap <C-i>
 " restore vim's c-a
 nunmap <C-a>
 
-" use Atl-Up Atl-Down to swap two lines.
-nmap <silent> <M-Up>            :.m.-2<CR>
-nmap <silent> <M-Down>          :.m.+1<CR>
-imap <silent> <M-Up>       <C-O>:.m.-2<CR>
-imap <silent> <M-Down>     <C-O>:.m.+1<CR>
-
-" use Atl-Left Atl-Right to switch to previous or next buffer.
-nmap <silent> <M-Left>          :bp<CR>
-nmap <silent> <M-Right>         :bn<CR>
-imap <silent> <M-Left>     <C-O>:bp<CR>
-imap <silent> <M-Right>    <C-O>:bn<CR>
-
 nmap <HOME> ^
 imap <HOME> <C-O>^
-
-" easy split navigation
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 nnoremap Y y$
 
 nnoremap / /\v
 vnoremap / /\v
 
-noremap <leader>yy "+y
-noremap <leader>pp "+p
-
 " easy align plugin hotkeys.
 vnoremap <silent> <Enter> :EasyAlign<CR>
-
-" ShowMarks plugin has been replaced with vim-signature
-"" ShowMarks plugin hotkeys.
-"map <silent> <leader>mt :ShowMarksToggle<CR>
-"map <silent> <leader>mo :ShowMarksOn<CR>
-"map <silent> <leader>mh :ShowMarksClearMark<CR>
-"map <silent> <leader>ma :ShowMarksClearAll<CR>
-"map <silent> <leader>mm :ShowMarksPlaceMark<CR>
 
 " vim-signature plugin hotkeys.
 noremap <silent> <leader>mt :SignatureToggle<CR>
@@ -418,7 +471,6 @@ ab #i- //-----------------------------------------------------------------------
 ab #i= //==================================================================================================
 ab #i/ ////////////////////////////////////////////////////////////////////////////////////////////////////
 ab dowhile do<CR>{<CR><CR>} while( 0 );
-
 
 func! LocalDoc()
     let s:word_under_cursor = expand("<cword>")
