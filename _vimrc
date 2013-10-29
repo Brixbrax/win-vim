@@ -465,6 +465,9 @@ vnoremap <silent> <Enter> :EasyAlign<CR>
 " vim-signature plugin hotkeys.
 noremap <silent> <leader>mt :SignatureToggle<CR>
 
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
+
 ab #i" #include "
 ab #i< #include <
 ab #i- //--------------------------------------------------------------------------------------------------
