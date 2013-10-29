@@ -660,15 +660,27 @@ func! SetupCpp()
     call SetupCppCompiler()
 endf
 
-func! GenerateCppCTagsAndCScopeFiles()
+func! GenerateCppCTagsFile()
     " generate ctags
     execute "!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q ."
+endf
+
+func! UpdateSingleCppCTagsFile()
+    " update ctags
+    let f = expand("%:p")
+    let cwd = getcwd()
+    let tagfilename = cwd . "/tags"
+    execute "!ctags -a -f " . tagfilename . " --c++-kinds=+p --fields=+liaS --extra=+q " . "\"" . f . "\""
+endf
+
+func! GenerateCppCScopeFile()
     " generate cscope
     if filereadable( "cscope.out" )
         execute "set nocscopeverbose"
         execute "cscope kill cscope.out"
         execute "set cscopeverbose"
     endif
+
     execute "!cscope -Rbk"
     if filereadable( "cscope.out" )
         execute "cscope add cscope.out"
@@ -709,8 +721,12 @@ func! SetupCppHotKeys()
     imap <buffer> <C-F5>                <C-O>:call RunCppProject()<CR>
 
     " generate tags file
-     map <buffer> <C-F12>                    :call GenerateCppCTagsAndCScopeFiles()<CR><CR>
-    imap <buffer> <C-F12>               <C-O>:call GenerateCppCTagsAndCScopeFiles()<CR><CR>
+     map <buffer> <F12>                      :call UpdateSingleCppCTagsFile()<CR><CR>
+    imap <buffer> <F12>                 <C-O>:call UpdateSingleCppCTagsFile()<CR><CR>
+     map <buffer> <C-F12>                    :call GenerateCppCTagsFile()<CR><CR>
+    imap <buffer> <C-F12>               <C-O>:call GenerateCppCTagsFile()<CR><CR>
+     map <buffer> <M-F12>                    :call GenerateCppCScopeFile()<CR><CR>
+    imap <buffer> <M-F12>               <C-O>:call GenerateCppCScopeFile()<CR><CR>
 
 endf
 
