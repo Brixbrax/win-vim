@@ -122,7 +122,7 @@ set wildignore=*.o,*.obj,*~,*.py[co],*.bak,*.exe,*.swp,*.pyc,*.svn,*.git
 set magic            " for regular expressions turn magic on
 set background=dark
 set laststatus=2
-set spell
+"set spell
 
 if has("gui_running")
     " don't show toolbar
@@ -294,6 +294,15 @@ let g:yankring_replace_n_nkey = '<C-Down>'
 
 " N/A
 
+"
+" python-mode
+"
+
+let g:pymode_lint_write = 0
+let g:pymode_lint = 1
+let g:pymode_lint_ignore = "C0303"
+let g:pymode_folding = 1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -346,6 +355,8 @@ nnoremap <leader>jd                  :YcmCompleter GoToDefinitionElseDeclaration
 
  noremap <leader>yy                  "+y
  noremap <leader>pp                  "+p
+
+     nmap <leader>w                  :set warp!<CR>
 
 " 
 " Function Keys ( F1 ~ F12 ) mappings
