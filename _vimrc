@@ -42,6 +42,10 @@ if !exists("g:make_output")
     let g:make_output = ""
 endif
 
+if !exists("g:python_version")
+    let g:python_version = "27"
+endif
+
 if has("win16") || has("win32") || has("win64")
     let g:system = "windows"
     if exists("$PROCESSOR_ARCHITECTURE")
@@ -123,6 +127,7 @@ set magic            " for regular expressions turn magic on
 set background=dark
 set laststatus=2
 "set spell
+set previewheight=4
 
 if has("gui_running")
     " don't show toolbar
@@ -356,7 +361,7 @@ nnoremap <leader>jd                  :YcmCompleter GoToDefinitionElseDeclaration
  noremap <leader>yy                  "+y
  noremap <leader>pp                  "+p
 
-     nmap <leader>w                  :set warp!<CR>
+     nmap <leader>w                  :set wrap!<CR>
 
 " 
 " Function Keys ( F1 ~ F12 ) mappings
@@ -621,7 +626,7 @@ endf
 
 func! RunPythonProject()
     let base_name = expand("%")
-    let cmd = '!python ' . base_name
+    let cmd = '!C:\\Python' . g:python_version . '\\python.exe ' . base_name
     execute "update"
     execute cmd
 endf
