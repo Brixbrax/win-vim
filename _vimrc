@@ -363,6 +363,8 @@ nnoremap <leader>jd                  :YcmCompleter GoToDefinitionElseDeclaration
 
      nmap <leader>w                  :set wrap!<CR>
 
+ noremap <leader>sp                  :set spell!<CR>
+
 " 
 " Function Keys ( F1 ~ F12 ) mappings
 "
@@ -576,7 +578,10 @@ func! SetupPython()
     setlocal softtabstop=4
     setlocal expandtab
     setlocal nowrap
-
+    setlocal spell
+ 
+    " note: python2 default encoding is ascii, python3 is utf-8
+    ab pyencoding # -*- encoding: utf-8 -*-
     "
     " make program settings
     "
@@ -671,6 +676,8 @@ func! SetupCpp()
     endif
 
     let s:setup_cpp_flag = 1
+
+    setlocal spell
 
     call SetupCppHotKeys()
     call SetupCppCompiler()
