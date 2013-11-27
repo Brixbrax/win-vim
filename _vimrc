@@ -493,6 +493,10 @@ ab #i= //=======================================================================
 ab #i/ ////////////////////////////////////////////////////////////////////////////////////////////////////
 ab dowhile do<CR>{<CR><CR>} while( 0 );
 
+" highlight the redundant space.
+highlight RedundantSpaces term=standout ctermbg=Grey guibg=#ffddcc
+call matchadd('RedundantSpaces', '\(\s\+$\| \+\ze\t\|\t\zs \+\)\(\%#\)\@!')
+
 func! LocalDoc()
     let s:word_under_cursor = expand("<cword>")
 
