@@ -25,6 +25,7 @@
 let g:system = "linux"
 let g:processor_architecture = "x86"
 let g:pc_name = "unknown"
+let g:load_default_cscope_files = 0
 
 if !exists("g:cpp_compiler")
     let g:cpp_compiler = "none"
@@ -307,6 +308,19 @@ let g:pymode_lint_write = 0
 let g:pymode_lint = 1
 let g:pymode_lint_ignore = "C0303"
 let g:pymode_folding = 1
+
+"
+" airline
+"
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_detect_whitespace = 0
+
+"
+" Doxygen-support
+"
+
+let g:Doxy_LoadMenus = "no"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
@@ -671,6 +685,10 @@ func! AppendHomePaths(lib_name_list)
 endf
 
 func! AppendHomeCScopeFiles(lib_name_list)
+    if g:load_default_cscope_files != 0:
+        return
+    endif
+
     let home_cscope_dir = $HOME . "\\vimfiles\\cscope"
     execute "set nocscopeverbose"
     for lib_name in a:lib_name_list
