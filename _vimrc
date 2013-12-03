@@ -685,7 +685,7 @@ func! AppendHomePaths(lib_name_list)
 endf
 
 func! AppendHomeCScopeFiles(lib_name_list)
-    if g:load_default_cscope_files != 0
+    if g:load_default_cscope_files == 0
         return
     endif
 
