@@ -2,8 +2,8 @@
 " VIM Hints
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Jump to the tag under current cursort with a new window: 
-"    ^Wg] or ^W] 
+" Jump to the tag under current cursort with a new window:
+"    ^Wg] or ^W]
 
 
 " 在 insert mode 要刪除同一 word 游標前的字元:
@@ -111,6 +111,7 @@ set expandtab
 set cindent
 set cinoptions=:0,g0,p0,t0,(0,W4
 
+set tagstack
 set hidden
 set showmatch
 set ignorecase
@@ -130,9 +131,11 @@ set laststatus=2
 "set spell
 set previewheight=4
 
+set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
+
 if has("gui_running")
     " don't show toolbar
-    set guioptions-=T 
+    set guioptions-=T
     " don't show menu
     " set guioptions-=m
 endif
@@ -170,10 +173,12 @@ colorscheme candycode
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "
-" cscope 
-"
+" cscope_maps
+" notice: this plugin will make vim's Ctrl-T unwork.
+"         ( vim's Ctrl-] jump to tag and Ctrl-T bring you back. )
+"         use :set nocscopetag can fix this issue.
+"         but we can use alternative keys: Ctrl-O and Ctrl-I
 
-set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
 
 "
 " indent_guides
@@ -191,7 +196,7 @@ let g:indent_guides_enable_on_vim_startup = 0
 let g:easybuffer_toggle_position = 'HorizontalBelow'
 let g:easybuffer_horizontal_height = '&lines/5'
 
-" 
+"
 " PyDoc
 "
 
@@ -199,28 +204,11 @@ let g:pydoc_cmd = 'python -m pydoc'
 " let g:pydoc_open_cmd = 'vsplit'
 " let g:pydoc_open_cmd = 'tabnew'
 
-" 
+"
 " Tagbar
 "
 
 let g:tagbar_left = 1
-
-
-"
-" clang_complete
-"
-
-" no longer use clang_complete plugin.
-"
-"if g:system == "windows"
-"    let g:clang_complete_auto = 1
-"    let g:clang_complete_copen = 1
-"    let g:clang_auto_user_options = 'path, .clang_complete'
-"    let g:clang_use_library = 1
-"    let g:clang_snippets = 1
-"    let g:clang_snippets_engine = 'clang_complete'
-"    let g:clang_hi_errors = 1
-"endif
 
 "
 " netrw
@@ -232,7 +220,7 @@ let g:netrw_sftp_cmd = "psftp"
 
 "
 " NERDTree
-" 
+"
 
 " N/A
 
@@ -265,8 +253,8 @@ let g:ycm_max_diagnostics_to_display = 30
 " N/A
 
 "
-" MatchTagAlways 
-" 
+" MatchTagAlways
+"
 
 let g:mta_use_matchparen_group = 1
 
@@ -281,7 +269,7 @@ au Syntax * RainbowParenthesesLoadBraces
 
 "
 " ProtoDef
-" 
+"
 
 let g:protodefctagsexe = $VIM . '\ctags.exe'
 let g:protodefprotogetter = $HOME . "\\vimfiles\\bundle\\vim-protodef\\pullproto.pl"
@@ -397,7 +385,7 @@ let mapleader = "\\"
 
 " clear the search highlighting
      map <silent> <leader>l          :noh<CR>
- 
+
 " Useful mappings for managing tabs
      map <leader>tn                  :tabnew<CR>
      map <leader>to                  :tabonly<CR>
@@ -417,7 +405,7 @@ nnoremap <leader>jd                  :YcmCompleter GoToDefinitionElseDeclaration
 
  noremap <leader>sp                  :set spell!<CR>
 
-" 
+"
 " Function Keys ( F1 ~ F12 ) mappings
 "
 
@@ -440,16 +428,16 @@ nnoremap <leader>jd                  :YcmCompleter GoToDefinitionElseDeclaration
      map <silent> <S-F4>             :cp<CR>
     imap <silent> <S-F4>        <C-O>:cp<CR>
 
-" Open and close all the three plugins (srcexpl, taglist, NERDTree) on the same time 
-    nmap <C-F8>                      :TrinityToggleAll<CR> 
-    nmap <C-F9>                      :TrinityToggleSourceExplorer<CR> 
-    nmap <C-F10>                     :TrinityToggleTagList<CR> 
-    nmap <C-F11>                     :TrinityToggleNERDTree<CR> 
+" Open and close all the three plugins (srcexpl, taglist, NERDTree) on the same time
+    nmap <C-F8>                      :TrinityToggleAll<CR>
+    nmap <C-F9>                      :TrinityToggleSourceExplorer<CR>
+    nmap <C-F10>                     :TrinityToggleTagList<CR>
+    nmap <C-F11>                     :TrinityToggleNERDTree<CR>
 
 " Toggle the Tagbar plugin, better than taglist plugin.
 nnoremap <silent> <F10>              :TagbarToggle<CR>
 
-" 
+"
 " ATL Keys mappings.
 "
 
@@ -471,8 +459,8 @@ nnoremap <silent> <M-3>              :YRShow<CR>
 " use ATL-4 to toggle Gundo window.
 nnoremap <silent> <M-4>              :GundoToggle<CR>
 
-" search the word under cursor in this file 
-" highlight the word and jump to the first position 
+" search the word under cursor in this file
+" highlight the word and jump to the first position
      map          <M-g>             *:vimgrep <cword> %<CR>
     imap          <M-g>   <C-O>*<C-O>:vimgrep <cword> %<CR>
 
@@ -492,7 +480,7 @@ nnoremap <silent> <M-4>              :GundoToggle<CR>
     imap <silent> <M-Left>      <C-O>:bp<CR>
     imap <silent> <M-Right>     <C-O>:bn<CR>
 
-" 
+"
 " Tab Keys mappings.
 "
 
@@ -514,7 +502,7 @@ nnoremap <C-l> <C-w>l
 
 " restore vim's C-i function
 " CTRL-O: 回到前一個 jump 前的位置
-" CTRL-I: 回到剛 jump 後的位置 
+" CTRL-I: 回到剛 jump 後的位置
 " help jump-motions
 unmap <C-i>
 
@@ -618,7 +606,7 @@ autocmd FileType xml                exe ":silent 1,$!tidy --input-xml true --ind
 autocmd FileType html,html,xhtml    exe ":silent 1,$!tidy --indent yes -q"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Python functions 
+" Python functions
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 func! SetupPython()
@@ -637,31 +625,31 @@ func! SetupPython()
     "
     " editor settings
     "
-    
+
     setlocal tabstop=4
     setlocal shiftwidth=4
     setlocal softtabstop=4
     setlocal expandtab
     setlocal nowrap
     setlocal spell
- 
+
     " note: python2 default encoding is ascii, python3 is utf-8
     ab pyencoding # -*- encoding: utf-8 -*-
 
     "
     " make program settings
     "
-    
+
     setlocal makeprg=python\ %
     setlocal errorformat=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-    
+
 endf
 
 func! SetupPythonHotKeys()
 
     " comment current line.
      map <buffer> <C-K><C-C>                 I# <ESC>
-    imap <buffer> <C-K><C-C>            <C-O>I# 
+    imap <buffer> <C-K><C-C>            <C-O>I#
 
     " uncomment current line.
      map <buffer> <C-K><C-U>                 ^2x
@@ -671,7 +659,7 @@ func! SetupPythonHotKeys()
     " add option 'j' to not jump to the first position.
      map <buffer> <C-K><C-F>                 :vimgrep /<C-R><C-W>/j **/*.py<CR>
     imap <buffer> <C-K><C-F>            <C-O>:vimgrep /<C-R><C-W>/j **/*.py<CR>
-    
+
     " compile the python file
      map <buffer> <F7>                       :call CompilePythonUnit()<CR><CR>
     imap <buffer> <F7>                  <C-O>:call CompilePythonUnit()<CR><CR>
@@ -683,10 +671,12 @@ func! SetupPythonHotKeys()
     imap <buffer> <F5>                  <C-O>:call RunPythonProject()<CR><CR>
      map <buffer> <C-F5>                     :call RunPythonProject()<CR><CR>
     imap <buffer> <C-F5>                <C-O>:call RunPythonProject()<CR><CR>
-     
+
     " generate tags file
      map <buffer> <C-F12>                    :!ctags -R --languages=python .<CR><CR>
     imap <buffer> <C-F12>               <C-O>:!ctags -R --languages=python .<CR><CR>
+     map <buffer> <S-F12>                    :!ctags -R --languages=python .<CR><CR>
+    imap <buffer> <S-F12>               <C-O>:!ctags -R --languages=python .<CR><CR>
 
 endf
 
@@ -703,7 +693,7 @@ func! RunPythonProject()
 endf
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Common CPP functions 
+" Common CPP functions
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 func! AppendHomeTagsFiles(tags_file_list)
@@ -784,7 +774,7 @@ func! SetupCppHotKeys()
 
     " comment current line.
      map <buffer> <C-K><C-C>                 I// <ESC>
-    imap <buffer> <C-K><C-C>            <C-O>I// 
+    imap <buffer> <C-K><C-C>            <C-O>I//
 
     " uncomment current line.
      map <buffer> <C-K><C-U>                 ^3x<ESC>
@@ -818,6 +808,8 @@ func! SetupCppHotKeys()
     imap <buffer> <F12>                 <C-O>:call UpdateSingleCppCTagsFile()<CR><CR>
      map <buffer> <C-F12>                    :call GenerateCppCTagsFile()<CR><CR>
     imap <buffer> <C-F12>               <C-O>:call GenerateCppCTagsFile()<CR><CR>
+     map <buffer> <S-F12>                    :call GenerateCppCTagsFile()<CR><CR>
+    imap <buffer> <S-F12>               <C-O>:call GenerateCppCTagsFile()<CR><CR>
      map <buffer> <M-F12>                    :call GenerateCppCScopeFile()<CR><CR>
     imap <buffer> <M-F12>               <C-O>:call GenerateCppCScopeFile()<CR><CR>
 
@@ -864,12 +856,12 @@ func! SetupCppCompiler()
     endif
 
     " call the corresponded setup cpp compiler function.
-    let compiler_list = [ 
+    let compiler_list = [
         \[ "gcc", "SetupGCCCompiler" ],
         \[ "vc9", "SetupVC9Compiler" ],
         \[ "vc10", "SetupVC10Compiler" ],
         \[ "vc11", "SetupVC11Compiler" ],
-        \[ "mingw", "SetupMinGWCompiler" ] 
+        \[ "mingw", "SetupMinGWCompiler" ]
         \ ]
     for [ compiler_name, setup_func_name ] in compiler_list
         if g:cpp_compiler == compiler_name
@@ -1039,7 +1031,7 @@ func! SetupVC11Compiler()
                         \%f(%l)\ :\ fatal\ error\ C%n:\ %m,
                         \%f(%l):\ error\ C%n:\ %m,
                         \%f(%l):\ fatal\ error\ C%n:\ %m
-    
+
     " use $INCLUDE environment variable value and replace ';' to ',' and need
     " to escape ' ' and '\' before we set to path.
     let l:inc = substitute($INCLUDE, ';', ',', 'g')
@@ -1098,7 +1090,7 @@ func! MinGWCompileCppUnit()
 endf
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" HELP functions 
+" HELP functions
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 func! SetupHelp()
