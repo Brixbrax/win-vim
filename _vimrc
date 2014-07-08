@@ -348,6 +348,17 @@ endif
 
 " N/A
 
+"
+" ctrlp-funky
+"
+
+let g:ctrlp_extensions = ['funky']
+let g:ctrlp_funky_syntax_highlight = 1
+
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Common Settings for Programming
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
